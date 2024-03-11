@@ -12,6 +12,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ShowPropertyPage from "./pages/properties/ShowPropertyPage";
 import NewPropertyPage from "./pages/properties/NewPropertyPage";
 import EditPropertyPage from "./pages/properties/EditPropertyPage";
+import IndexPropertyPage from "./pages/properties/IndexPropertyPage";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
 
           <Route element={<PrivateRoutes />}>
             <Route path="/private" element={<PrivatePage />} />
+            <Route path="/properties" element={<IndexPropertyPage />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
