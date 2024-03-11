@@ -19,8 +19,16 @@ const RegisterForm = () => {
   const onSubmit = async (data) => {
     try {
       const response = await registerFetch(data.email, data.password);
+      const responseBody = await response.json();
       if (response.headers) {
-        Cookies.set("auth_token", response.headers.get("Authorization")); // SET AUTH TOKEN
+        Cookies.set(
+          "auth_token",
+          JSON.stringify({
+            token: response.headers.get("Authorization"),
+            user_id: responseBody.user.id,
+            email: responseBody.user.email,
+          })
+        );
         dispatch(login());
         navigate(`/`);
       }
