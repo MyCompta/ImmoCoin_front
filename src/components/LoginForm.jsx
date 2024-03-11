@@ -17,7 +17,6 @@ const LoginForm = () => {
   const onSubmit = async (data) => {
     try {
       const response = await loginFetch(data.email, data.password);
-
       if (response.headers) {
         const responseBody = await response.json();
         Cookies.set(
