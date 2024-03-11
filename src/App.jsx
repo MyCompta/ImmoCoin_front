@@ -9,7 +9,7 @@ import PrivateRoutes from "./utils/PrivateRoutes";
 import "./App.css";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
-import CGV from './pages/CGV';
+import CGV from './pages/CgvPage';
 import ShowPropertyPage from "./pages/properties/ShowPropertyPage";
 import NewPropertyPage from "./pages/properties/NewPropertyPage";
 import EditPropertyPage from "./pages/properties/EditPropertyPage";

@@ -8,7 +8,8 @@ import Cookies from "js-cookie";
 
 const RegisterForm = () => {
 
-  const [checkboxCGV, setCheckboxCGV] = useState('')
+  const [checkboxCGV, setCheckboxCGV] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const {
     register,
@@ -26,10 +27,9 @@ const RegisterForm = () => {
     const onSubmit = async (data) => {
 
       if(!checkboxCGV) {
-        alert('You must validate CGU to registrer')
+        setErrorMessage('You must validate CGU to register')
         return;
        } else {
-        console.log('chexkbox', checkboxCGV)
 
 
       try {
@@ -104,12 +104,7 @@ const RegisterForm = () => {
           <p>{errors.passwordConfirmation.message}</p>
         )}
 
-        <input type="submit" />
-        </form>
-
-
-   
-          <form>
+          <label htmlFor="CGV">
             <input 
               type="checkbox" 
               id="CGV" 
@@ -117,8 +112,14 @@ const RegisterForm = () => {
               checked={checkboxCGV}
               onChange={(e) => setCheckboxCGV(e.target.checked)}
             />
-            <Link to={'/cgv'}>CGV</Link><br></br>
-          </form>
+          I have read and agree to the <Link to={'/cgv'}>CGV</Link>
+          </label>
+          <br />
+
+          {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+
+          <input type="submit" />
+        </form>
 
           
  
