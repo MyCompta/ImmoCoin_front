@@ -1,7 +1,11 @@
-import IndexProperties from "../components/IndexProperties";
+import Hero from "../components/Hero";
 
 const HomePage = () => {
-  return <IndexProperties />;
+  return (
+    <div className="homeContainer">
+      <Hero />
+    </div>
+  );
 };
 
 export default HomePage;
