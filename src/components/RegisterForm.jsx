@@ -1,11 +1,15 @@
+import { useState } from 'react'
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { registerFetch } from "../services/authApi";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/reducers/authReducer";
 import Cookies from "js-cookie";
 
 const RegisterForm = () => {
+
+  const [checkboxCGV, setCheckboxCGV] = useState('');
+
   const {
     register,
     handleSubmit,
@@ -16,26 +20,33 @@ const RegisterForm = () => {
   const navigate = useNavigate();
   const password = watch("password");
 
-  const onSubmit = async (data) => {
-    try {
-      const response = await registerFetch(data.email, data.password);
-      const responseBody = await response.json();
-      if (response.headers) {
-        Cookies.set(
-          "auth_token",
-          JSON.stringify({
-            token: response.headers.get("Authorization"),
-            user_id: responseBody.user.id,
-            email: responseBody.user.email,
-          })
-        );
-        dispatch(login());
-        navigate(`/`);
+ 
+
+
+    const onSubmit = async (data) => {
+
+
+
+      try {
+        const response = await registerFetch(data.email, data.password);
+        const responseBody = await response.json();
+        if (response.headers) {
+          Cookies.set(
+            "auth_token",
+            JSON.stringify({
+              token: response.headers.get("Authorization"),
+              user_id: responseBody.user.id,
+              email: responseBody.user.email,
+            })
+          );
+          dispatch(login());
+          navigate(`/`);
+        }
+      } catch (error) {
+        console.error("Error during register:", error.message);
       }
-    } catch (error) {
-      console.error("Error during register:", error.message);
-    }
-  };
+    };
+  
 
   return (
     <div className="registerForm">
@@ -88,9 +99,36 @@ const RegisterForm = () => {
           <p>{errors.passwordConfirmation.message}</p>
         )}
 
-        <input type="submit" />
-      </form>
+          <input 
+            type="checkbox"
+            {...register("cguvalidation", {
+              required: "You must validate CGV",
+            })}
+            checked={checkboxCGV}
+            onChange={(e) => {
+              setCheckboxCGV(e.target.checked);
+            }}
+          />
+          I have read and agree to the <Link to={'/cgv'}>CGV</Link>
+
+          {errors.cguvalidation && (
+            <p>{errors.cguvalidation.message}</p>
+          )}
+
+            <br></br>
+
+          <input type="submit" />
+        </form>
+
+          
+ 
+        
+
+
     </div>
+
+
+
   );
 };
 
