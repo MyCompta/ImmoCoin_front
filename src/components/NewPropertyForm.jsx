@@ -26,6 +26,7 @@ const NewPropertyForm = () => {
         data.title,
         data.price,
         data.description,
+        data.location,
         authToken.id
       );
 
@@ -63,6 +64,18 @@ const NewPropertyForm = () => {
         />
         {errors.price && errors.price.type === "required" && (
           <p>Price can not be empty</p>
+        )}
+
+        <input
+          type="text"
+          {...register("location", {
+            required: true,
+          })}
+          placeholder="Location here"
+          autoComplete="current-location"
+        />
+        {errors.location && errors.location.type === "required" && (
+          <p>Location can not be empty</p>
         )}
 
         <input
