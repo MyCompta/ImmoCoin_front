@@ -111,7 +111,21 @@ export const getPropertyFetch = async (id) => {
 };
 
 // UPDATE PROPERTY FETCH
-export const updatePropertyFetch = async (title, price, description, id) => {
+export const updatePropertyFetch = async (
+  title,
+  price,
+  description,
+  furnished,
+  surface,
+  room,
+  floor,
+  terrace,
+  garden,
+  caretaker,
+  lift,
+  location,
+  id
+) => {
   try {
     const authToken = JSON.parse(Cookies.get("auth_token"));
 
@@ -120,7 +134,15 @@ export const updatePropertyFetch = async (title, price, description, id) => {
         title: title,
         price: price,
         description: description,
-        user_id: authToken.user_id,
+        furnished: furnished,
+        surface: surface,
+        room: room,
+        floor: floor,
+        terrace: terrace,
+        garden: garden,
+        caretaker: caretaker,
+        lift: lift,
+        location: location,
       },
     };
     const response = await fetch(apiUrl + "properties/" + id, {
