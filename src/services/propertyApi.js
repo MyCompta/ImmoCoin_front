@@ -30,18 +30,38 @@ export const getPropertiesFetch = async (filter = {}) => {
 };
 
 // POST NEW PROPERTY FETCH
-export const createPropertyFetch = async (title, price, description) => {
+export const createPropertyFetch = async (
+  title,
+  price,
+  description,
+  furnished,
+  surface,
+  room,
+  floor,
+  terrace,
+  garden,
+  caretaker,
+  lift
+) => {
   console.log("Attempting to get auth_token from cookies...");
   try {
     console.log("Attempting to get auth_token from cookies...");
-    const authToken = JSON.parse(Cookies.get("auth_token"));
+    const authToken = await JSON.parse(Cookies.get("auth_token"));
+    console.log(authToken);
 
     const data = {
       property: {
         title: title,
         price: price,
         description: description,
-        user_id: authToken.user_id,
+        furnished: furnished,
+        surface: surface,
+        room: room,
+        floor: floor,
+        terrace: terrace,
+        garden: garden,
+        caretaker: caretaker,
+        lift: lift,
       },
     };
     const response = await fetch(apiUrl + "/properties", {

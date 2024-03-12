@@ -26,13 +26,10 @@ const IndexProperties = () => {
       <h1>Properties on the market</h1>
       <Link to="/properties/new">Add a new property</Link>
       <ul>
-        {properties &&
+        {properties.length &&
           properties.map((property) => (
             <li key={property.id}>
-              <Link
-                to={`/properties/${property.id}`}
-                state={{ property: property }}
-              >
+              <Link to={`/properties/${property.id}`} state={{ property: property }}>
                 <h3>{property.title}</h3> <p>${property.price}</p>
                 <p>{property.description}</p>
               </Link>
