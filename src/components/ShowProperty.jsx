@@ -38,6 +38,7 @@ const ShowProperty = () => {
           {property.title} - ${property.price}
         </h1>
         <p>{property.description}</p>
+        <p>{property.location}</p>
       </div>
     )
   );
