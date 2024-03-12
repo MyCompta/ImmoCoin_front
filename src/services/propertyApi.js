@@ -6,13 +6,6 @@ const apiUrl = import.meta.env.VITE_API_URL;
 export const getPropertiesFetch = async (filter) => {
   const queryUrl = new URLSearchParams(filter);
 
-  console.log({
-    "Content-Type": "application/json",
-    ...(filter && {
-      Authorization: JSON.parse(Cookies.get("auth_token")).token,
-    }),
-  });
-
   try {
     const response = await fetch(
       apiUrl + "/properties" + (filter ? "?" + queryUrl.toString() : ""),
