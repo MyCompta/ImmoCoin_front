@@ -1,4 +1,3 @@
-import ShowProperty from "../../components/ShowProperty";
 import { useEffect } from 'react'
 import { Link, useParams } from "react-router-dom";
 import ShowProperty from "../../components/ShowProperty";
