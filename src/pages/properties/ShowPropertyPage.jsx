@@ -47,12 +47,9 @@ const ShowPropertyPage = () => {
   };
 
 
-
   return (
     <div className="showPropertyContainer">
-      <h1>ShowPropertyPage</h1>
       <ShowProperty />
-
            {currentUserId === user.user_id && (
         <>
           <Link to={`/properties/edit/${id}`}>Edit</Link>
