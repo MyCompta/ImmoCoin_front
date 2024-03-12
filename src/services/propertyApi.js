@@ -3,24 +3,39 @@ import Cookies from "js-cookie";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 // GET PROPERTIES FETCH
-export const getPropertiesFetch = async () => {
+export const getPropertiesFetch = async (filter) => {
+  const queryUrl = new URLSearchParams(filter);
+
+  console.log({
+    "Content-Type": "application/json",
+    ...(filter && {
+      Authorization: JSON.parse(Cookies.get("auth_token")).token,
+    }),
+  });
+
   try {
-    const response = await fetch(apiUrl + '/properties', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
+    const response = await fetch(
+      apiUrl + "/properties" + (filter ? "?" + queryUrl.toString() : ""),
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          ...(filter && {
+            Authorization: JSON.parse(Cookies.get("auth_token")).token,
+          }),
+        },
       }
-    });
+    );
 
     if (!response.ok) {
-      throw new Error('Get Properties failed. Please check your credentials and try again.');
+      throw new Error("Get Properties failed. Please check your credentials and try again.");
     }
 
-    return response.json()
+    return response.json();
   } catch (error) {
     return error;
   }
-}
+};
 
 // POST NEW PROPERTY FETCH
 export const createPropertyFetch = async (title, price, description, location) => {
@@ -40,7 +55,6 @@ export const createPropertyFetch = async (title, price, description, location) =
     };
 
     console.log(data);
-
 
     const response = await fetch(apiUrl + "/properties", {
       method: "POST",
