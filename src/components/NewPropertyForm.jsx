@@ -29,7 +29,8 @@ const NewPropertyForm = () => {
         data.terrace,
         data.garden,
         data.caretaker,
-        data.lift
+        data.lift,
+        data.location
       );
 
       if (response.ok) {
@@ -64,6 +65,16 @@ const NewPropertyForm = () => {
           autoComplete="current-price"
         />
         {errors.price && errors.price.type === "required" && <p>Price can not be empty</p>}
+
+        <input
+          type="text"
+          {...register("location", {
+            required: true,
+          })}
+          placeholder="Location here"
+          autoComplete="current-location"
+        />
+        {errors.location && errors.location.type === "required" && <p>Location can not be empty</p>}
 
         <input
           type="text"

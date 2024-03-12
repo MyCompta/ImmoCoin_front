@@ -32,6 +32,7 @@ const IndexProperties = () => {
               <Link to={`/properties/${property.id}`} state={{ property: property }}>
                 <h3>{property.title}</h3> <p>${property.price}</p>
                 <p>{property.description}</p>
+                <p>{property.location}</p>
               </Link>
             </li>
           ))}

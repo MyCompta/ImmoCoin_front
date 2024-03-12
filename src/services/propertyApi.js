@@ -41,7 +41,8 @@ export const createPropertyFetch = async (
   terrace,
   garden,
   caretaker,
-  lift
+  lift,
+  location
 ) => {
   console.log("Attempting to get auth_token from cookies...");
   try {
@@ -62,8 +63,12 @@ export const createPropertyFetch = async (
         garden: garden,
         caretaker: caretaker,
         lift: lift,
+        location: location,
       },
     };
+
+    console.log(data);
+
     const response = await fetch(apiUrl + "/properties", {
       method: "POST",
       headers: {
