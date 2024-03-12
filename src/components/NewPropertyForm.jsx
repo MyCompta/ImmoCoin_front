@@ -12,13 +12,9 @@ const NewPropertyForm = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    let authToken = {};
-
     if (!Cookies.get("auth_token")) {
       console.log("User is not logged in. Unable to create a property.");
       throw new Error("User is not logged in. Unable to create a property.");
-    } else {
-      authToken = JSON.parse(Cookies.get("auth_token"));
     }
 
     try {
@@ -26,8 +22,15 @@ const NewPropertyForm = () => {
         data.title,
         data.price,
         data.description,
-        data.location,
-        authToken.id
+        data.furnished,
+        data.surface,
+        data.room,
+        data.floor,
+        data.terrace,
+        data.garden,
+        data.caretaker,
+        data.lift,
+        data.location
       );
 
       if (response.ok) {
@@ -50,21 +53,18 @@ const NewPropertyForm = () => {
           placeholder="Title here"
           autoComplete="current-title"
         />
-        {errors.title && errors.title.type === "required" && (
-          <p>Title can not be empty</p>
-        )}
+        {errors.title && errors.title.type === "required" && <p>Title can not be empty</p>}
 
         <input
           type="number"
           {...register("price", {
             required: true,
+            valueAsNumber: true,
           })}
           placeholder="Price here"
           autoComplete="current-price"
         />
-        {errors.price && errors.price.type === "required" && (
-          <p>Price can not be empty</p>
-        )}
+        {errors.price && errors.price.type === "required" && <p>Price can not be empty</p>}
 
         <input
           type="text"
@@ -74,9 +74,7 @@ const NewPropertyForm = () => {
           placeholder="Location here"
           autoComplete="current-location"
         />
-        {errors.location && errors.location.type === "required" && (
-          <p>Location can not be empty</p>
-        )}
+        {errors.location && errors.location.type === "required" && <p>Location can not be empty</p>}
 
         <input
           type="text"
@@ -89,6 +87,63 @@ const NewPropertyForm = () => {
         {errors.description && errors.description.type === "required" && (
           <p>Description can not be empty</p>
         )}
+
+        <input
+          type="number"
+          {...register("room", {
+            required: true,
+            valueAsNumber: true,
+          })}
+          min={0}
+          step={1}
+          placeholder="room"
+        />
+        {errors.room && errors.room.type === "required" && <p>Room number can not be empty</p>}
+
+        <input
+          type="number"
+          {...register("floor", {
+            required: true,
+            valueAsNumber: true,
+          })}
+          min={-2}
+          step={1}
+          placeholder="floor"
+        />
+        {errors.room && errors.room.type === "required" && <p>Floor number can not be empty</p>}
+
+        <input
+          type="number"
+          {...register("surface", {
+            required: true,
+            valueAsNumber: true,
+          })}
+          min={8}
+          step={1}
+          placeholder="surface"
+        />
+        {errors.surface && errors.surface.type === "required" && <p>Surface can not be empty</p>}
+
+        <div>
+          <label htmlFor="furnished">Furnished</label>
+          <input id="furnished" type="checkbox" {...register("furnished")} />
+        </div>
+        <div>
+          <label htmlFor="terrace">Terrace</label>
+          <input id="terrace" type="checkbox" {...register("terrace")} />
+        </div>
+        <div>
+          <label htmlFor="garden">Garden</label>
+          <input id="garden" type="checkbox" {...register("garden")} />
+        </div>
+        <div>
+          <label htmlFor="caretaker">Caretaker</label>
+          <input id="caretaker" type="checkbox" {...register("caretaker")} />
+        </div>
+        <div>
+          <label htmlFor="lift">Lift</label>
+          <input id="lift" type="checkbox" {...register("lift")} />
+        </div>
 
         <input type="submit" />
       </form>
