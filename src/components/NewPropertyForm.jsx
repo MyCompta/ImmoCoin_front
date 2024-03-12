@@ -7,6 +7,7 @@ const NewPropertyForm = () => {
   const {
     register,
     handleSubmit,
+    //setValue,
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
@@ -20,12 +21,14 @@ const NewPropertyForm = () => {
     } else {
       authToken = JSON.parse(Cookies.get("auth_token"));
     }
-
+    console.log("images", data.images);
     try {
       const response = await createPropertyFetch(
         data.title,
         data.price,
         data.description,
+        data.location,
+        data.images,
         authToken.id
       );
 
@@ -76,6 +79,25 @@ const NewPropertyForm = () => {
         {errors.description && errors.description.type === "required" && (
           <p>Description can not be empty</p>
         )}
+
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          {...register("images", {
+            validate: (files) => {
+              const areAllImages = Array.from(files).every((file) =>
+                file.type.startsWith("image/")
+              );
+              return areAllImages || "Selected files must be images";
+            },
+          })}
+          onChange={(e) => {
+            // Utilisez setValue pour mettre à jour la valeur du champ "images"
+            const files = Array.from(e.target.files);
+            //setValue("images", files);
+          }}
+        />
 
         <input type="submit" />
       </form>
