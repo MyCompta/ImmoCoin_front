@@ -40,6 +40,7 @@ const EditPropertyForm = () => {
         data.title,
         data.price,
         data.description,
+        data.location,
         id
       );
 
@@ -79,6 +80,19 @@ const EditPropertyForm = () => {
           />
           {errors.price && errors.price.type === "required" && (
             <p>Price can not be empty</p>
+          )}
+
+          <input
+            type="string"
+            {...register("location", {
+              required: true,
+            })}
+            placeholder="location here"
+            autoComplete="current-location"
+            defaultValue={property.location}
+          />
+          {errors.location && errors.location.type === "required" && (
+            <p>Location can not be empty</p>
           )}
 
           <input
