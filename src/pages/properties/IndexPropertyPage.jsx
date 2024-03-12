@@ -17,8 +17,8 @@ export default function IndexPropertyPage() {
     fetchProperties();
   }, []);
   return (
-    <>
-      {properties &&
+    <ul>
+      {properties.length ? (
         properties.map((property) => (
           <li key={property.id}>
             <Link to={`/properties/${property.id}`} state={{ property: property }}>
@@ -26,7 +26,10 @@ export default function IndexPropertyPage() {
               <p>{property.description}</p>
             </Link>
           </li>
-        ))}
-    </>
+        ))
+      ) : (
+        <p>No properties found</p>
+      )}
+    </ul>
   );
 }
