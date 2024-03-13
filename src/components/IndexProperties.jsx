@@ -42,7 +42,6 @@ const IndexProperties = ({ filter }) => {
       )}
       <h1>Properties on the market</h1>
       <div className="properties-grid">
-        {console.log(properties)}
         {properties.length ? (
           properties.map((property) => (
             <PropertyCard

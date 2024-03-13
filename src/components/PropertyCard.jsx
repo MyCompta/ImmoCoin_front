@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import "./PropertyCard.css";
 
 export default function PropertyCard({ property, owned }) {
-  console.log(property);
-  console.log("owned:", owned);
   return (
     <div className={"propertyCard" + (owned ? " owned" : "")}>
       <Link to={`/properties/${property.id}`} state={{ property: property }}>
