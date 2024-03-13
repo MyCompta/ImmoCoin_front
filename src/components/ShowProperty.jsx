@@ -92,58 +92,67 @@ const ShowProperty = () => {
   return (
     property && (
       <>
-        {console.log(city)}
         <div className="ShowPropertyContainer">
-          <div className="thumbnail">
-            <img
-              src={
-                property.images?.length ? property.images[0] : "https://via.placeholder.com/600x400"
-              }
-              alt={property.title}
-              onClick={displayFullScreenThumbnail}
-              data-index={0}
-            />
-            <p className="price">${property.price}</p>
+          <div className="top_property">
+            <div className="propertytitle">
+              <h1>{property.title}</h1>
+            </div>
+            <div className="thumbnail">
+              <img
+                src={
+                  property.images?.length
+                    ? property.images[0]
+                    : "https://via.placeholder.com/600x400"
+                }
+                alt={property.title}
+                onClick={displayFullScreenThumbnail}
+                data-index={0}
+              />
+              <p className="price">${property.price}</p>
+            </div>
+            <div className="image_gallery">
+              {property.images?.length > 1 &&
+                property.images
+                  .slice(1)
+                  .map((image, index) => (
+                    <img
+                      key={index}
+                      src={image}
+                      alt={property.title}
+                      onClick={displayFullScreenThumbnail}
+                      data-index={index + 1}
+                    />
+                  ))}
+            </div>
           </div>
-          <div className="image_gallery">
-            {property.images?.length > 1 &&
-              property.images
-                .slice(1)
-                .map((image, index) => (
-                  <img
-                    key={index}
-                    src={image}
-                    alt={property.title}
-                    onClick={displayFullScreenThumbnail}
-                    data-index={index + 1}
-                  />
-                ))}
+          <div>
+            <div className="details">
+              <p>Location: {property.location}</p>
+              <p>Furnished: {property.furnished ? "Yes" : "No"}</p>
+              <p>Surface: {property.surface}m2</p>
+              <p>Room: {property.room}</p>
+              <p>Floor: {property.floor}</p>
+              <p>Terrace: {property.terrace ? "Yes" : "No"}</p>
+              <p>Garden: {property.garden ? "Yes" : "No"}</p>
+              <p>Caretaker: {property.caretaker ? "Yes" : "No"}</p>
+              <p>Lift: {property.lift ? "Yes" : "No"}</p>
+            </div>
+            <div className="propertydescription">
+              <p>{property.description}</p>
+            </div>
           </div>
-          <div className="map">
-            <DisplayMap />
-          </div>
-          <div className="propertytitle">
-            <h1>{property.title}</h1>
-          </div>
-          <div className="propertydescription">
-            <p>{property.description}</p>
-          </div>
-          <div className="actions">
-            <a className="contact" href={`mailto:${property.owner_email}`}>
-              Contact seller
-            </a>
-            <a href={`mailto:${property.owner_email}`}>{property.owner_email}</a>
-          </div>
-          <div className="details">
-            <p>Location: {property.location}</p>
-            <p>Furnished: {property.furnished ? "Yes" : "No"}</p>
-            <p>Surface: {property.surface}m2</p>
-            <p>Room: {property.room}</p>
-            <p>Floor: {property.floor}</p>
-            <p>Terrace: {property.terrace ? "Yes" : "No"}</p>
-            <p>Garden: {property.garden ? "Yes" : "No"}</p>
-            <p>Caretaker: {property.caretaker ? "Yes" : "No"}</p>
-            <p>Lift: {property.lift ? "Yes" : "No"}</p>
+          <div>
+            <div>
+              <div className="map">
+                <DisplayMap />
+              </div>
+              <div className="actions">
+                <a className="contact" href={`mailto:${property.owner_email}`}>
+                  Contact seller
+                </a>
+                <a href={`mailto:${property.owner_email}`}>{property.owner_email}</a>
+              </div>
+            </div>
           </div>
           <div className="modal_img" style={{ display: "none" }}>
             <div className="prev" onClick={() => changeImageIndex(-1)}>

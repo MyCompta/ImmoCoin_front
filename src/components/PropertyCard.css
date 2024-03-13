@@ -1,0 +1,64 @@
+.propertyCard {
+  border: 1px solid #333;
+  border-radius: 0.5rem;
+  padding: 4px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: 0.2s;
+  cursor: pointer;
+  text-align: center;
+  position: relative;
+}
+
+.propertyCard.owned {
+  border-color: #57a2ed;
+  color: #57a2ed;
+}
+
+.propertyCard.owned::before {
+  content: "Owned";
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #57a2ed;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  transform: translateX(-0.25rem) translateY(-50%);
+}
+
+.propertyCard:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+}
+
+.propertyImage {
+  width: 100%;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  transition: 0.2s;
+}
+.propertyCard:hover .propertyImage {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.propertyInfo {
+  padding: 12px;
+}
+
+.propertyCard a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.pills {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  background-color: #333;
+  color: white;
+}
+
+.propertyCard.owned .pills {
+  background-color: #57a2ed;
+}

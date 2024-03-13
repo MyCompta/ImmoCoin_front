@@ -58,10 +58,10 @@ const Navbar = () => {
         <div></div>
       </div>
       <div className="navbar__links">
-        <Link to={"/"}>Home</Link>
+        <Link to={"/properties"}>Home</Link>
         {isLogged === true ? (
           <>
-            <Link to={"/properties"}>My properties</Link>
+            <Link to={"/properties/my"}>My properties</Link>
             <Link to={"/profile"}>Profile</Link>
             <Link to={"#"} onClick={handleLogout}>
               Logout
