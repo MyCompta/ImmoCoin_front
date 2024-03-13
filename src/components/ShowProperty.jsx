@@ -3,17 +3,16 @@ import { useParams } from "react-router-dom";
 import { getPropertyFetch } from "../services/propertyApi";
 import { Link, useNavigate } from "react-router-dom";
 import { deletePropertyFetch } from "../services/propertyApi";
-import { useAtom } from 'jotai';
+import { useSetAtom } from "jotai";
 import Cookies from "js-cookie";
 import "./ShowProperty.css";
 
-import { userAtom } from '../atom/userAtom.jsx'
-
+import { userAtom } from "../atom/userAtom.jsx";
 
 const ShowProperty = () => {
   const { id } = useParams();
   const [property, setProperty] = useState();
-  const [user, setUser] = useAtom(userAtom)
+  const setUser = useSetAtom(userAtom);
   const navigate = useNavigate();
 
   const user_id = Cookies.get("auth_token") ? JSON.parse(Cookies.get("auth_token")).user_id : null;
@@ -34,7 +33,6 @@ const ShowProperty = () => {
     }
   };
 
-
   useEffect(() => {
     const fetchProperty = async () => {
       try {
@@ -44,15 +42,13 @@ const ShowProperty = () => {
         setUser((prevUser) => ({
           ...prevUser,
           user_id: fetchedProperty.user_id,
-        }))
-
-
+        }));
       } catch (error) {
         console.error("Error during get property:", error.message);
       }
     };
     fetchProperty();
-  }, [id]);
+  }, [id, setUser]);
 
   const displayFullScreenThumbnail = () => {
     const fullScreen = document.getElementById("fullScreen");
@@ -62,8 +58,6 @@ const ShowProperty = () => {
       fullScreen.style.display = "none";
     }
   };
-
-  
 
   return (
     property && (
@@ -84,6 +78,17 @@ const ShowProperty = () => {
               Contact seller
             </a>
             <a href={`mailto:${property.owner_email}`}>{property.owner_email}</a>
+          </div>
+          <div className="details">
+            <p>Location: {property.location}</p>
+            <p>Furnished: {property.furnished ? "Yes" : "No"}</p>
+            <p>Surface: {property.surface}m2</p>
+            <p>Room: {property.room}</p>
+            <p>Floor: {property.floor}</p>
+            <p>Terrace: {property.terrace ? "Yes" : "No"}</p>
+            <p>Garden: {property.garden ? "Yes" : "No"}</p>
+            <p>Caretaker: {property.caretaker ? "Yes" : "No"}</p>
+            <p>Lift: {property.lift ? "Yes" : "No"}</p>
           </div>
           <img
             id="fullScreen"
