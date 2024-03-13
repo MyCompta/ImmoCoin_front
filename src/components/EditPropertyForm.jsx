@@ -13,6 +13,7 @@ const EditPropertyForm = () => {
   const [property, setProperty] = useState();
   const [images, setImages] = useState([]);
   const [dragging, setDragging] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
   const navigate = useNavigate();
   const { id } = useParams();
   const imagesRef = useRef([]);
@@ -23,10 +24,6 @@ const EditPropertyForm = () => {
         const fetchedProperty = await getPropertyFetch(id);
         setProperty(fetchedProperty);
         setImages(fetchedProperty.images);
-        // Initialise imagesRef.current avec les mêmes valeurs que images
-        imagesRef.current = fetchedProperty.images.filter(
-          (image) => typeof image !== "string"
-        );
       } catch (error) {
         console.error("Error during get property:", error.message);
       }
@@ -58,13 +55,11 @@ const EditPropertyForm = () => {
     setDragging(false);
   };
 
-  const handleRemoveImage = (index) => {
+  const handleRemoveImage = (index, imageId) => {
     const newImages = [...images];
     newImages.splice(index, 1);
     setImages(newImages);
-    // Mettre à jour imagesRef.current pour correspondre à newImages
-    imagesRef.current = newImages.filter((image) => typeof image !== "string");
-    console.log("imagesRef.current", imagesRef.current);
+    setSelectedImages((prevSelectedImages) => [...prevSelectedImages, imageId]);
   };
 
   const onSubmit = async (data) => {
@@ -82,11 +77,12 @@ const EditPropertyForm = () => {
     formData.append("property[garden]", data.garden);
     formData.append("property[caretaker]", data.caretaker);
     formData.append("property[lift]", data.lift);
+    formData.append("deleted_images", JSON.stringify(selectedImages)); // images to delete
 
     console.log("imagesRef.current", imagesRef.current);
 
     for (let i = 0; i < imagesRef.current.length; i++) {
-      formData.append("property[images][]", imagesRef.current[i]);
+      formData.append("property[images][]", imagesRef.current[i]); // images to add
     }
 
     if (!Cookies.get("auth_token")) {
@@ -289,11 +285,7 @@ const EditPropertyForm = () => {
                 }}
               >
                 <img
-                  src={
-                    typeof image === "string"
-                      ? image
-                      : URL.createObjectURL(image)
-                  }
+                  src={image.url ? image.url : URL.createObjectURL(image)}
                   alt={`Image ${index}`}
                   style={{
                     width: "80%",
@@ -312,7 +304,7 @@ const EditPropertyForm = () => {
                   }}
                   onClick={(e) => {
                     e.preventDefault(); // Empêche la soumission du formulaire
-                    handleRemoveImage(index); // Supprime l'image
+                    handleRemoveImage(index, image.id); // Supprime l'image
                   }}
                 >
                   &#x2715; {/* Cross symbol */}
