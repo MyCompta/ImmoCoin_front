@@ -7,7 +7,7 @@ const LoginPage = () => {
       <h1>Login</h1>
       <LoginForm />
       <p>
-        You don&aopos;t have an account ? <Link to={"/register"}>Register</Link>
+        You don&apos;t have an account ? <Link to={"/register"}>Register</Link>
       </p>
       <p>
         Forgot your password ? <Link to={"/forgot-password"}>Reset it</Link>
