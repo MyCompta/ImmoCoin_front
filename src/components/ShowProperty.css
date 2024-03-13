@@ -33,7 +33,6 @@
 }
 
 .ShowPropertyContainer #fullScreen {
-  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -69,4 +68,54 @@
 .showPropertyContainer .actions button:hover {
   background-color: #333;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.image_gallery {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.image_gallery img {
+  width: 100%;
+  transition: all 0.2s;
+  cursor: pointer;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.image_gallery img:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border-radius: 1rem;
+}
+
+.modal_img {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 9999;
+}
+
+.modal_img .prev,
+.modal_img .next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 2;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.modal_img .prev {
+  left: 1rem;
+}
+
+.modal_img .next {
+  right: 1rem;
 }

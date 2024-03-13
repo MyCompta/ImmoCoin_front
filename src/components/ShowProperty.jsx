@@ -50,26 +50,61 @@ const ShowProperty = () => {
     fetchProperty();
   }, [id, setUser]);
 
-  const displayFullScreenThumbnail = () => {
+  const displayFullScreenThumbnail = (e) => {
+    e.preventDefault();
     const fullScreen = document.getElementById("fullScreen");
-    if (fullScreen.style.display === "none") {
-      fullScreen.style.display = "block";
+    fullScreen.src = e.target.src;
+    fullScreen.setAttribute("data-index", e.target.getAttribute("data-index"));
+    const fullScreenParent = fullScreen.parentElement;
+    if (fullScreenParent.style.display === "none") {
+      fullScreenParent.style.display = "block";
     } else {
-      fullScreen.style.display = "none";
+      fullScreenParent.style.display = "none";
     }
+  };
+
+  const changeImageIndex = (n) => {
+    const fullScreen = document.getElementById("fullScreen");
+    const index = Number(fullScreen.getAttribute("data-index"));
+    let newIndex = index + n;
+    if (newIndex < 0) {
+      newIndex = property.images.length - 1;
+    } else if (newIndex >= property.images.length) {
+      newIndex = 0;
+    }
+    fullScreen.setAttribute("data-index", newIndex);
+    fullScreen.src = property.images[newIndex];
   };
 
   return (
     property && (
       <>
+        {console.log(property)}
         <div className="ShowPropertyContainer">
           <div className="thumbnail">
             <img
-              src={property.image ? property.image : "https://via.placeholder.com/600x400"}
+              src={
+                property.images?.length ? property.images[0] : "https://via.placeholder.com/600x400"
+              }
               alt={property.title}
               onClick={displayFullScreenThumbnail}
+              data-index={0}
             />
             <p className="price">${property.price}</p>
+          </div>
+          <div className="image_gallery">
+            {property.images?.length > 1 &&
+              property.images
+                .slice(1)
+                .map((image, index) => (
+                  <img
+                    key={index}
+                    src={image}
+                    alt={property.title}
+                    onClick={displayFullScreenThumbnail}
+                    data-index={index + 1}
+                  />
+                ))}
           </div>
           <h1>{property.title}</h1>
           <p>{property.description}</p>
@@ -90,13 +125,23 @@ const ShowProperty = () => {
             <p>Caretaker: {property.caretaker ? "Yes" : "No"}</p>
             <p>Lift: {property.lift ? "Yes" : "No"}</p>
           </div>
-          <img
-            id="fullScreen"
-            src={property.image ? property.image : "https://via.placeholder.com/600x400"}
-            alt={property.title}
-            style={{ display: "none" }}
-            onClick={displayFullScreenThumbnail}
-          />
+          <div className="modal_img" style={{ display: "none" }}>
+            <div className="prev" onClick={() => changeImageIndex(-1)}>
+              {"<"}
+            </div>
+            <img
+              id="fullScreen"
+              src={
+                property.images?.length ? property.images[0] : "https://via.placeholder.com/600x400"
+              }
+              alt={property.title}
+              onClick={displayFullScreenThumbnail}
+              data-index="0"
+            />
+            <div className="next" onClick={() => changeImageIndex(1)}>
+              {">"}
+            </div>
+          </div>
         </div>
         {property.user_id === user_id && (
           <>
