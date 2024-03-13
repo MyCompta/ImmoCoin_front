@@ -31,52 +31,30 @@ export const getPropertiesFetch = async (filter) => {
 };
 
 // POST NEW PROPERTY FETCH
-export const createPropertyFetch = async (
-  title,
-  price,
-  description,
-  furnished,
-  surface,
-  room,
-  floor,
-  terrace,
-  garden,
-  caretaker,
-  lift,
-  location
-) => {
-  console.log("Attempting to get auth_token from cookies...");
+export const createPropertyFetch = async (formData) => {
+  // console.log("Attempting to get auth_token from cookies...");
   try {
     console.log("Attempting to get auth_token from cookies...");
     const authToken = await JSON.parse(Cookies.get("auth_token"));
     console.log(authToken);
 
-    const data = {
-      property: {
-        title: title,
-        price: price,
-        description: description,
-        furnished: furnished,
-        surface: surface,
-        room: room,
-        floor: floor,
-        terrace: terrace,
-        garden: garden,
-        caretaker: caretaker,
-        lift: lift,
-        location: location,
-      },
-    };
+    // Read formData content
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
+    }
 
-    console.log(data);
+    // Read image contents
+    const imageFiles = formData.getAll("property[images][]");
+    for (let i = 0; i < imageFiles.length; i++) {
+      console.log("Image " + (i + 1) + ": ", imageFiles[i]);
+    }
 
     const response = await fetch(apiUrl + "/properties", {
       method: "POST",
       headers: {
         Authorization: authToken.token,
-        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: formData,
     });
     //console.log("Response Headers:", [...response.headers.entries()]);
     //console.log(data)
