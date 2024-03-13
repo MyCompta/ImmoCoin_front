@@ -20,7 +20,7 @@ export default function DisplayMap () {
     zoom: 1,
   });
 
-  console.log("la city est", city)
+  // console.log("la city est", city)
 
   useEffect(() => {
     if (city) {
@@ -30,7 +30,7 @@ export default function DisplayMap () {
       })
       .send()
       .then((response) => {
-        console.log('Geocoding Response:', response); // Afficher la réponse en console
+        // console.log('Geocoding Response:', response);
         if (response && response.body && response.body.features && response.body.features.length > 0) {
           const feature = response.body.features[0];
           setViewport({
