@@ -1,12 +1,30 @@
+import { useEffect } from 'react'
 import { Link, useParams } from "react-router-dom";
 import ShowProperty from "../../components/ShowProperty";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { deletePropertyFetch } from "../../services/propertyApi";
+import { useAtom, useAtomValue } from 'jotai';
+
+import { userAtom } from '../../atom/userAtom.jsx';
 
 const ShowPropertyPage = () => {
+  const [user, setUser] = useAtom(userAtom)
   const { id } = useParams();
   const navigate = useNavigate();
+
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, [setUser]);
+
+  const authTokenCookie = Cookies.get("auth_token");
+  const authToken = authTokenCookie ? JSON.parse(authTokenCookie) : {};
+  const currentUserId = authToken.user_id;
+
 
   const onClick = async () => {
     let authToken = {};
@@ -28,12 +46,16 @@ const ShowPropertyPage = () => {
     }
   };
 
+
   return (
     <div className="showPropertyContainer">
-      <h1>ShowPropertyPage</h1>
       <ShowProperty />
-      <Link to={`/properties/edit/${id}`}>Edit</Link>
-      <button onClick={onClick}>Delete</button>
+           {currentUserId === user.user_id && (
+        <>
+          <Link to={`/properties/edit/${id}`}>Edit</Link>
+          <button onClick={onClick}>Delete</button>
+        </>
+      )}
     </div>
   );
 };

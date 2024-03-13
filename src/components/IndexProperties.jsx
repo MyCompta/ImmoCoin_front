@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getPropertiesFetch } from "../services/propertyApi";
+import Cookies from "js-cookie";
 
 const IndexProperties = () => {
-  const [properties, setProperties] = useState([]);
+  const [properties, setProperties] = useState("");
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("Effect is running");
+    // console.log("Effect is running");
     const fetchProperties = async () => {
       try {
         const fetchedProperties = await getPropertiesFetch();
@@ -20,24 +21,27 @@ const IndexProperties = () => {
     fetchProperties();
   }, []);
 
-  console.log("Component is rendered");
+  const authToken = Cookies.get("auth_token");
+
+  console.log("auth_token est", authToken);
   return (
     <div className="indexPropertyContainer">
+      {authToken !== undefined && <Link to="/properties/new">Add a new property</Link>}
       <h1>Properties on the market</h1>
-      <Link to="/properties/new">Add a new property</Link>
       <ul>
-        {properties &&
+        {properties.length ? (
           properties.map((property) => (
             <li key={property.id}>
-              <Link
-                to={`/properties/${property.id}`}
-                state={{ property: property }}
-              >
+              <Link to={`/properties/${property.id}`} state={{ property: property }}>
                 <h3>{property.title}</h3> <p>${property.price}</p>
                 <p>{property.description}</p>
+                <p>{property.location}</p>
               </Link>
             </li>
-          ))}
+          ))
+        ) : (
+          <p>No properties found</p>
+        )}
       </ul>
     </div>
   );

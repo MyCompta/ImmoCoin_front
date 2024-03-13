@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { loginFetch } from "../services/authApi";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/reducers/authReducer";
+
 import Cookies from "js-cookie";
+
 
 const LoginForm = () => {
   const {
@@ -27,7 +29,7 @@ const LoginForm = () => {
             email: responseBody.user.email,
           })
         );
-        // console.log(JSON.parse(Cookies.get("auth_token")));
+        console.log(JSON.parse(Cookies.get("auth_token")));
         dispatch(login());
         navigate(`/`);
       }

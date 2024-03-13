@@ -9,6 +9,7 @@ import PrivateRoutes from "./utils/PrivateRoutes";
 import "./App.css";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import CGV from './pages/CgvPage';
 import ShowPropertyPage from "./pages/properties/ShowPropertyPage";
 import NewPropertyPage from "./pages/properties/NewPropertyPage";
 import EditPropertyPage from "./pages/properties/EditPropertyPage";
@@ -30,9 +31,11 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/user/password/reset" element={<ResetPasswordPage />} />
+          <Route path="/cgv" element={<CGV />} />
 
           <Route element={<PrivateRoutes />}>
             <Route path="/private" element={<PrivatePage />} />
+            <Route path="/properties" element={<IndexPropertyPage />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
