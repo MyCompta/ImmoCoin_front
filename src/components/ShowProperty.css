@@ -3,10 +3,21 @@
   margin-top: 4rem;
   margin-left: auto;
   margin-right: auto;
-  max-width: 800px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 2rem;
 }
+
+.ShowPropertyContainer > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .thumbnail {
   position: relative;
+  max-width: 600px;
 }
 .thumbnail img {
   width: 100%;
@@ -45,8 +56,9 @@
 
 .showPropertyContainer .actions {
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: column;
   margin: 2rem 0;
+  width: 500px;
 }
 
 .showPropertyContainer .actions a,
@@ -118,4 +130,26 @@
 
 .modal_img .next {
   right: 1rem;
+}
+
+.map {
+  box-shadow: 0px 0px 5px 0px #222;
+  border-radius: 5px;
+}
+
+.propertydescription {
+  font-size: large;
+  margin-bottom: auto;
+}
+
+.details {
+  text-align: start;
+  justify-content: center;
+  margin: auto;
+}
+
+@media screen and (max-width: 800px) {
+  .top_property {
+    width: 100%;
+  }
 }
