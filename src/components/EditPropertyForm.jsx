@@ -33,16 +33,19 @@ const EditPropertyForm = () => {
 
   const handleFileChange = (e) => {
     //imagesRef.current = [...e.target.files];
-    imagesRef.current = e.target.files;
+    imagesRef.current = [...imagesRef.current, ...e.target.files];
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
     setDragging(false);
     const files = Array.from(e.dataTransfer.files);
-    // Ajout des nouvelles images au tableau d'images
-    setImages((prevImages) => [...prevImages, ...files]);
-    imagesRef.current = [...imagesRef.current, ...files];
+    // Filtrer uniquement les fichiers d'image
+    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+    // Ajouter les fichiers d'image au tableau d'images
+    setImages((prevImages) => [...prevImages, ...imageFiles]);
+    // Ajouter les fichiers d'image à la référence des images
+    imagesRef.current = [...imagesRef.current, ...imageFiles];
   };
 
   const handleDragOver = (e) => {
