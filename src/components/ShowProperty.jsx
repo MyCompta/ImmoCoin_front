@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import "./ShowProperty.css";
 import { errorAtom } from "../atom/errorAtom";
 import { userAtom } from "../atom/userAtom.jsx";
+import DisplayMap from "./map.jsx";
 
 const ShowProperty = () => {
   const { id } = useParams();
@@ -110,8 +111,15 @@ const ShowProperty = () => {
                   />
                 ))}
           </div>
-          <h1>{property.title}</h1>
-          <p>{property.description}</p>
+          <div className="map">
+            <DisplayMap />
+          </div>
+          <div className="propertytitle">
+            <h1>{property.title}</h1>
+          </div>
+          <div className="propertydescription">
+            <p>{property.description}</p>
+          </div>
           <div className="actions">
             <a className="contact" href={`mailto:${property.owner_email}`}>
               Contact seller
@@ -150,7 +158,7 @@ const ShowProperty = () => {
         {property.user_id === user_id && (
           <>
             <hr />
-            <div className="actions">
+            <div className="actions-button">
               <Link to={`/properties/edit/${id}`}>Edit</Link>
               <button onClick={deleteProperty}>Delete</button>
             </div>
