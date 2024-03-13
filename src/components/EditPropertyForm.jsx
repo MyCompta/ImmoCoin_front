@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { getPropertyFetch, updatePropertyFetch } from "../services/propertyApi";
@@ -11,14 +11,22 @@ const EditPropertyForm = () => {
     formState: { errors },
   } = useForm();
   const [property, setProperty] = useState();
+  const [images, setImages] = useState([]);
+  const [dragging, setDragging] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
+  const imagesRef = useRef([]);
 
   useEffect(() => {
     const fetchProperty = async () => {
       try {
         const fetchedProperty = await getPropertyFetch(id);
         setProperty(fetchedProperty);
+        setImages(fetchedProperty.images);
+        // Initialise imagesRef.current avec les mêmes valeurs que images
+        imagesRef.current = fetchedProperty.images.filter(
+          (image) => typeof image !== "string"
+        );
       } catch (error) {
         console.error("Error during get property:", error.message);
       }
@@ -26,23 +34,71 @@ const EditPropertyForm = () => {
     fetchProperty();
   }, []);
 
+  const handleFileChange = (e) => {
+    //imagesRef.current = [...e.target.files];
+    imagesRef.current = e.target.files;
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragging(false);
+    const files = Array.from(e.dataTransfer.files);
+    // Ajout des nouvelles images au tableau d'images
+    setImages((prevImages) => [...prevImages, ...files]);
+    imagesRef.current = [...imagesRef.current, ...files];
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setDragging(false);
+  };
+
+  const handleRemoveImage = (index) => {
+    const newImages = [...images];
+    newImages.splice(index, 1);
+    setImages(newImages);
+    // Mettre à jour imagesRef.current pour correspondre à newImages
+    imagesRef.current = newImages.filter((image) => typeof image !== "string");
+    console.log("imagesRef.current", imagesRef.current);
+  };
+
   const onSubmit = async (data) => {
     let authToken = {};
+    const formData = new FormData();
+    formData.append("property[title]", data.title);
+    formData.append("property[price]", data.price);
+    formData.append("property[description]", data.description);
+    formData.append("property[location]", data.location);
+    formData.append("property[furnished]", data.furnished);
+    formData.append("property[surface]", data.surface);
+    formData.append("property[room]", data.room);
+    formData.append("property[floor]", data.floor);
+    formData.append("property[terrace]", data.terrace);
+    formData.append("property[garden]", data.garden);
+    formData.append("property[caretaker]", data.caretaker);
+    formData.append("property[lift]", data.lift);
+
+    console.log("imagesRef.current", imagesRef.current);
+
+    for (let i = 0; i < imagesRef.current.length; i++) {
+      formData.append("property[images][]", imagesRef.current[i]);
+    }
 
     if (!Cookies.get("auth_token")) {
       throw new Error("User is not logged in. Unable to edit the property.");
     } else {
       authToken = JSON.parse(Cookies.get("auth_token"));
+      formData.append("property[user_id]", authToken.user_id);
     }
 
     try {
-      const response = await updatePropertyFetch(
-        data.title,
-        data.price,
-        data.description,
-        data.location,
-        id
-      );
+      console.log("formData", formData);
+      const response = await updatePropertyFetch(formData, id);
 
       if (response.ok) {
         navigate(`/properties/${id}`);
@@ -51,6 +107,10 @@ const EditPropertyForm = () => {
       console.error("Error during create property:", error.message);
     }
   };
+
+  useEffect(() => {
+    console.log(images, imagesRef.current);
+  }, [images, imagesRef.current]);
 
   return (
     property && (
@@ -65,7 +125,9 @@ const EditPropertyForm = () => {
             autoComplete="current-title"
             defaultValue={property.title}
           />
-          {errors.title && errors.title.type === "required" && <p>Title can not be empty</p>}
+          {errors.title && errors.title.type === "required" && (
+            <p>Title can not be empty</p>
+          )}
 
           <input
             type="number"
@@ -77,7 +139,9 @@ const EditPropertyForm = () => {
             autoComplete="current-price"
             defaultValue={property.price}
           />
-          {errors.price && errors.price.type === "required" && <p>Price can not be empty</p>}
+          {errors.price && errors.price.type === "required" && (
+            <p>Price can not be empty</p>
+          )}
 
           <input
             type="text"
@@ -116,7 +180,9 @@ const EditPropertyForm = () => {
             placeholder="room"
             defaultValue={property.room}
           />
-          {errors.room && errors.room.type === "required" && <p>Room number can not be empty</p>}
+          {errors.room && errors.room.type === "required" && (
+            <p>Room number can not be empty</p>
+          )}
 
           <input
             type="number"
@@ -129,7 +195,9 @@ const EditPropertyForm = () => {
             placeholder="floor"
             defaultValue={property.floor}
           />
-          {errors.room && errors.room.type === "required" && <p>Floor number can not be empty</p>}
+          {errors.room && errors.room.type === "required" && (
+            <p>Floor number can not be empty</p>
+          )}
 
           <input
             type="number"
@@ -142,7 +210,9 @@ const EditPropertyForm = () => {
             placeholder="surface"
             defaultValue={property.surface}
           />
-          {errors.surface && errors.surface.type === "required" && <p>Surface can not be empty</p>}
+          {errors.surface && errors.surface.type === "required" && (
+            <p>Surface can not be empty</p>
+          )}
 
           <div>
             <label htmlFor="furnished">Furnished</label>
@@ -164,7 +234,12 @@ const EditPropertyForm = () => {
           </div>
           <div>
             <label htmlFor="garden">Garden</label>
-            <input id="garden" type="checkbox" {...register("garden")} checked={property.garden} />
+            <input
+              id="garden"
+              type="checkbox"
+              {...register("garden")}
+              checked={property.garden}
+            />
           </div>
           <div>
             <label htmlFor="caretaker">Caretaker</label>
@@ -177,7 +252,73 @@ const EditPropertyForm = () => {
           </div>
           <div>
             <label htmlFor="lift">Lift</label>
-            <input id="lift" type="checkbox" {...register("lift")} checked={property.lift} />
+            <input
+              id="lift"
+              type="checkbox"
+              {...register("lift")}
+              checked={property.lift}
+            />
+          </div>
+
+          <input
+            type="file"
+            name="image"
+            multiple
+            accept="image/*"
+            {...register("image")}
+            onChange={handleFileChange}
+          />
+
+          <div
+            className="images"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            style={{
+              minHeight: images.length === 0 ? "200px" : "auto", // Taille pour être visible quand vide
+              border: dragging ? "2px solid green" : "2px dashed #ccc", // Changement de cadre au survol
+            }}
+          >
+            {images.map((image, index) => (
+              <div
+                key={index}
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  width: "25%",
+                }}
+              >
+                <img
+                  src={
+                    typeof image === "string"
+                      ? image
+                      : URL.createObjectURL(image)
+                  }
+                  alt={`Image ${index}`}
+                  style={{
+                    width: "80%",
+                    margin: "10px",
+                    verticalAlign: "top",
+                  }}
+                />
+                <button
+                  style={{
+                    position: "absolute",
+                    top: "5px",
+                    right: "5px",
+                    backgroundColor: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault(); // Empêche la soumission du formulaire
+                    handleRemoveImage(index); // Supprime l'image
+                  }}
+                >
+                  &#x2715; {/* Cross symbol */}
+                </button>
+              </div>
+            ))}
           </div>
 
           <input type="submit" />
