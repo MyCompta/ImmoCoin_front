@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Map from "react-map-gl";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import { cityAtom } from '../atom/userAtom.jsx';
 import mapboxSdk from '@mapbox/mapbox-sdk/services/geocoding';
 
@@ -10,19 +10,25 @@ const TOKEN = 'pk.eyJ1IjoibWF0aGlldWFtYWNoZXIiLCJhIjoiY2x0cG44eW5tMHMwaTJqbXA0aX
 const geocodingClient = mapboxSdk({ accessToken: TOKEN });
 
 export default function DisplayMap () {
-  const city = useAtomValue(cityAtom);
+  const cityObject = useAtomValue(cityAtom);
+  const city = cityObject && cityObject.city ? cityObject.city : null;
+
+
   const [viewport, setViewport] = useState({
     longitude: 2.39,
     latitude: 48.88,
     zoom: 1,
   });
 
+  console.log("la city est", city)
+
   useEffect(() => {
-    if (city && typeof city === 'object' && city.city) {
-      geocodingClient.forwardGeocode({
-        query: city.city,
+    if (city) {
+        geocodingClient.forwardGeocode({
+        query: city,
         limit: 1
       })
+      .send()
       .then((response) => {
         console.log('Geocoding Response:', response); // Afficher la réponse en console
         if (response && response.body && response.body.features && response.body.features.length > 0) {

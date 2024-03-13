@@ -3,17 +3,18 @@ import { useParams } from "react-router-dom";
 import { getPropertyFetch } from "../services/propertyApi";
 import { Link, useNavigate } from "react-router-dom";
 import { deletePropertyFetch } from "../services/propertyApi";
-import { useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import Cookies from "js-cookie";
 import "./ShowProperty.css";
 import { errorAtom } from "../atom/errorAtom";
-import { userAtom } from "../atom/userAtom.jsx";
+import { userAtom, cityAtom } from "../atom/userAtom.jsx";
 import DisplayMap from "./map.jsx";
 
 const ShowProperty = () => {
   const { id } = useParams();
   const [property, setProperty] = useState();
   const setUser = useSetAtom(userAtom);
+  const [city, setCity] = useAtom(cityAtom);
   const navigate = useNavigate();
   const setError = useSetAtom(errorAtom);
 
@@ -47,13 +48,20 @@ const ShowProperty = () => {
           ...prevUser,
           user_id: fetchedProperty.user_id,
         }));
+
+        setCity((prevCity) => ({
+          ...prevCity,
+          city: fetchedProperty.location,
+        }));
+
+
       } catch (error) {
         setError("Error during get property:", error.message);
         console.error("Error during get property:", error.message);
       }
     };
     fetchProperty();
-  }, [id, setUser, setError]);
+  }, [id, setUser, setError, setCity]);
 
   const displayFullScreenThumbnail = (e) => {
     e.preventDefault();
@@ -84,6 +92,7 @@ const ShowProperty = () => {
   return (
     property && (
       <>
+
         <div className="ShowPropertyContainer">
           <div className="top_property">
             <div className="propertytitle">
