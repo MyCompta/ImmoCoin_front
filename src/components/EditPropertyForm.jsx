@@ -34,6 +34,7 @@ const EditPropertyForm = () => {
   const handleFileChange = (e) => {
     //imagesRef.current = [...e.target.files];
     imagesRef.current = [...imagesRef.current, ...e.target.files];
+    setImages((prevImages) => [...prevImages, ...e.target.files]);
   };
 
   const handleDrop = (e) => {
@@ -62,7 +63,13 @@ const EditPropertyForm = () => {
     const newImages = [...images];
     newImages.splice(index, 1);
     setImages(newImages);
-    setSelectedImages((prevSelectedImages) => [...prevSelectedImages, imageId]);
+
+    if (imageId) {
+      setSelectedImages((prevSelectedImages) => [
+        ...prevSelectedImages,
+        imageId,
+      ]);
+    }
   };
 
   const onSubmit = async (data) => {
@@ -108,8 +115,8 @@ const EditPropertyForm = () => {
   };
 
   useEffect(() => {
-    console.log(images, imagesRef.current);
-  }, [images, imagesRef.current]);
+    console.log("selectedImages", selectedImages);
+  }, [selectedImages]);
 
   return (
     property && (
