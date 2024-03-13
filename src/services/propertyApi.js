@@ -34,20 +34,20 @@ export const getPropertiesFetch = async (filter) => {
 export const createPropertyFetch = async (formData) => {
   // console.log("Attempting to get auth_token from cookies...");
   try {
-    console.log("Attempting to get auth_token from cookies...");
+    // console.log("Attempting to get auth_token from cookies...");
     const authToken = await JSON.parse(Cookies.get("auth_token"));
-    console.log(authToken);
+    // console.log(authToken);
 
     // Read formData content
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ": " + pair[1]);
-    }
+    // for (let pair of formData.entries()) {
+    //   console.log(pair[0] + ": " + pair[1]);
+    // }
 
     // Read image contents
-    const imageFiles = formData.getAll("property[images][]");
-    for (let i = 0; i < imageFiles.length; i++) {
-      console.log("Image " + (i + 1) + ": ", imageFiles[i]);
-    }
+    // const imageFiles = formData.getAll("property[images][]");
+    // for (let i = 0; i < imageFiles.length; i++) {
+    //   console.log("Image " + (i + 1) + ": ", imageFiles[i]);
+    // }
 
     const response = await fetch(apiUrl + "/properties", {
       method: "POST",

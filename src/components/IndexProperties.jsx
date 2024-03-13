@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getPropertiesFetch } from "../services/propertyApi";
 import Cookies from "js-cookie";
+import { useSetAtom } from "jotai";
+import { errorAtom } from "../atom/errorAtom";
 
 const IndexProperties = () => {
   const [properties, setProperties] = useState("");
-  const [error, setError] = useState(null);
+  const setError = useSetAtom(errorAtom);
 
   useEffect(() => {
     // console.log("Effect is running");
@@ -19,11 +21,10 @@ const IndexProperties = () => {
       }
     };
     fetchProperties();
-  }, []);
+  }, [setError]);
 
   const authToken = Cookies.get("auth_token");
 
-  console.log("auth_token est", authToken);
   return (
     <div className="indexPropertyContainer">
       {authToken !== undefined && <Link to="/properties/new">Add a new property</Link>}
