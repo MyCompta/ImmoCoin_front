@@ -37,7 +37,7 @@ function App() {
 
           <Route element={<PrivateRoutes />}>
             <Route path="/private" element={<PrivatePage />} />
-            <Route path="/properties" element={<IndexPropertyPage />} />
+            <Route path="/properties/my" element={<IndexPropertyPage filter="owned" />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

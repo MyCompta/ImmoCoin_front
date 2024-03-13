@@ -4,8 +4,9 @@ import { getPropertiesFetch } from "../services/propertyApi";
 import Cookies from "js-cookie";
 import { useSetAtom } from "jotai";
 import { errorAtom } from "../atom/errorAtom";
+import PropTypes from "prop-types";
 
-const IndexProperties = () => {
+const IndexProperties = ({ filter }) => {
   const [properties, setProperties] = useState("");
   const setError = useSetAtom(errorAtom);
 
@@ -13,15 +14,20 @@ const IndexProperties = () => {
     // console.log("Effect is running");
     const fetchProperties = async () => {
       try {
-        const fetchedProperties = await getPropertiesFetch();
-        setProperties(fetchedProperties);
+        if (filter) {
+          const fetchedProperties = await getPropertiesFetch(filter);
+          setProperties(fetchedProperties);
+        } else {
+          const fetchedProperties = await getPropertiesFetch();
+          setProperties(fetchedProperties);
+        }
       } catch (error) {
         console.error("Error during get properties:", error.message);
         setError("Error fetching properties");
       }
     };
     fetchProperties();
-  }, [setError]);
+  }, [setError, filter]);
 
   const authToken = Cookies.get("auth_token");
 
@@ -46,6 +52,10 @@ const IndexProperties = () => {
       </ul>
     </div>
   );
+};
+
+IndexProperties.propTypes = {
+  filter: PropTypes.string,
 };
 
 export default IndexProperties;
