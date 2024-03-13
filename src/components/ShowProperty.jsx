@@ -6,7 +6,7 @@ import { deletePropertyFetch } from "../services/propertyApi";
 import { useSetAtom } from "jotai";
 import Cookies from "js-cookie";
 import "./ShowProperty.css";
-
+import { errorAtom } from "../atom/errorAtom";
 import { userAtom } from "../atom/userAtom.jsx";
 
 const ShowProperty = () => {
@@ -14,11 +14,13 @@ const ShowProperty = () => {
   const [property, setProperty] = useState();
   const setUser = useSetAtom(userAtom);
   const navigate = useNavigate();
+  const setError = useSetAtom(errorAtom);
 
   const user_id = Cookies.get("auth_token") ? JSON.parse(Cookies.get("auth_token")).user_id : null;
 
   const deleteProperty = async () => {
     if (!Cookies.get("auth_token")) {
+      setError("You need to be logged in to do this action.");
       throw new Error("User is not logged in. Unable to delete the property.");
     }
 
@@ -29,6 +31,7 @@ const ShowProperty = () => {
         navigate(`/`);
       }
     } catch (error) {
+      setError("Error during delete property:", error.message);
       console.error("Error during create property:", error.message);
     }
   };
@@ -44,11 +47,12 @@ const ShowProperty = () => {
           user_id: fetchedProperty.user_id,
         }));
       } catch (error) {
+        setError("Error during get property:", error.message);
         console.error("Error during get property:", error.message);
       }
     };
     fetchProperty();
-  }, [id, setUser]);
+  }, [id, setUser, setError]);
 
   const displayFullScreenThumbnail = () => {
     const fullScreen = document.getElementById("fullScreen");

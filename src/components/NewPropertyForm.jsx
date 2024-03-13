@@ -1,8 +1,10 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { createPropertyFetch } from "../services/propertyApi";
 import Cookies from "js-cookie";
+import { useSetAtom } from "jotai";
+import { errorAtom } from "../atom/errorAtom";
 
 const NewPropertyForm = () => {
   const {
@@ -11,8 +13,8 @@ const NewPropertyForm = () => {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
-  const [images, setImages] = useState([]);
   const imagesRef = useRef([]);
+  const setError = useSetAtom(errorAtom);
 
   const onSubmit = async (data) => {
     let authToken = {};
@@ -35,7 +37,7 @@ const NewPropertyForm = () => {
     }
 
     if (!Cookies.get("auth_token")) {
-      console.log("User is not logged in. Unable to create a property.");
+      setError("You need to be logged in to do this action.");
       throw new Error("User is not logged in. Unable to create a property.");
     } else {
       authToken = JSON.parse(Cookies.get("auth_token"));
@@ -43,7 +45,6 @@ const NewPropertyForm = () => {
     }
 
     try {
-      console.log("formData", formData);
       const response = await createPropertyFetch(formData);
 
       if (response.ok) {
@@ -51,6 +52,7 @@ const NewPropertyForm = () => {
         navigate(`/properties/${responseData.id}`);
       }
     } catch (error) {
+      setError("Error during create property:", error.message);
       console.error("Error during create property:", error.message);
     }
   };
@@ -70,9 +72,7 @@ const NewPropertyForm = () => {
           placeholder="Title here"
           autoComplete="current-title"
         />
-        {errors.title && errors.title.type === "required" && (
-          <p>Title can not be empty</p>
-        )}
+        {errors.title && errors.title.type === "required" && <p>Title can not be empty</p>}
 
         <input
           type="number"
@@ -83,9 +83,7 @@ const NewPropertyForm = () => {
           placeholder="Price here"
           autoComplete="current-price"
         />
-        {errors.price && errors.price.type === "required" && (
-          <p>Price can not be empty</p>
-        )}
+        {errors.price && errors.price.type === "required" && <p>Price can not be empty</p>}
 
         <input
           type="text"
@@ -95,9 +93,7 @@ const NewPropertyForm = () => {
           placeholder="Location here"
           autoComplete="current-location"
         />
-        {errors.location && errors.location.type === "required" && (
-          <p>Location can not be empty</p>
-        )}
+        {errors.location && errors.location.type === "required" && <p>Location can not be empty</p>}
 
         <input
           type="text"
@@ -129,9 +125,7 @@ const NewPropertyForm = () => {
           step={1}
           placeholder="room"
         />
-        {errors.room && errors.room.type === "required" && (
-          <p>Room number can not be empty</p>
-        )}
+        {errors.room && errors.room.type === "required" && <p>Room number can not be empty</p>}
 
         <input
           type="number"
@@ -143,9 +137,7 @@ const NewPropertyForm = () => {
           step={1}
           placeholder="floor"
         />
-        {errors.room && errors.room.type === "required" && (
-          <p>Floor number can not be empty</p>
-        )}
+        {errors.room && errors.room.type === "required" && <p>Floor number can not be empty</p>}
 
         <input
           type="number"
@@ -157,9 +149,7 @@ const NewPropertyForm = () => {
           step={1}
           placeholder="surface"
         />
-        {errors.surface && errors.surface.type === "required" && (
-          <p>Surface can not be empty</p>
-        )}
+        {errors.surface && errors.surface.type === "required" && <p>Surface can not be empty</p>}
 
         <div>
           <label htmlFor="furnished">Furnished</label>

@@ -5,7 +5,8 @@ import { useDispatch } from "react-redux";
 import { login } from "../redux/reducers/authReducer";
 
 import Cookies from "js-cookie";
-
+import { useSetAtom } from "jotai";
+import { errorAtom } from "../atom/errorAtom";
 
 const LoginForm = () => {
   const {
@@ -15,6 +16,7 @@ const LoginForm = () => {
   } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const setError = useSetAtom(errorAtom);
 
   const onSubmit = async (data) => {
     try {
@@ -29,11 +31,11 @@ const LoginForm = () => {
             email: responseBody.user.email,
           })
         );
-        console.log(JSON.parse(Cookies.get("auth_token")));
         dispatch(login());
         navigate(`/`);
       }
     } catch (error) {
+      setError("Error during login:", error.message);
       console.error("Error during login:", error.message);
     }
   };
@@ -53,12 +55,8 @@ const LoginForm = () => {
           placeholder="Email here"
           autoComplete="current-email"
         />
-        {errors.email && errors.email.type === "required" && (
-          <p>Email can not be empty</p>
-        )}
-        {errors.email && errors.email.type === "pattern" && (
-          <p>{errors.email.message}</p>
-        )}
+        {errors.email && errors.email.type === "required" && <p>Email can not be empty</p>}
+        {errors.email && errors.email.type === "pattern" && <p>{errors.email.message}</p>}
 
         <input
           type="password"
@@ -69,9 +67,7 @@ const LoginForm = () => {
           placeholder="Password here"
           autoComplete="current-password"
         />
-        {errors.password && errors.password.type === "required" && (
-          <p>Password can not be empty</p>
-        )}
+        {errors.password && errors.password.type === "required" && <p>Password can not be empty</p>}
         {errors.password && errors.password.type === "minLength" && (
           <p>Password should have 6 characters minimum</p>
         )}

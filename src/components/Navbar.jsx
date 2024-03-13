@@ -11,7 +11,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const handleLogout = () => {
     if (Cookies.get("auth_token")) {
       Cookies.remove("auth_token");
@@ -19,10 +18,6 @@ const Navbar = () => {
       navigate(`/`);
     }
   };
-
-  useEffect(() => {
-    console.log(isLogged);
-  }, [isLogged]);
 
   useEffect(() => {
     if (isMenuOpen) {

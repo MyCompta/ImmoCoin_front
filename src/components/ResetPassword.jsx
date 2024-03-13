@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { resetPasswordFetch } from "../services/authApi";
+import { useSetAtom } from "jotai";
+import { errorAtom } from "../atom/errorAtom";
 
 const ResetPassword = () => {
   const {
@@ -12,13 +13,10 @@ const ResetPassword = () => {
   } = useForm();
   const navigate = useNavigate();
   const password = watch("password");
-  const resetToken = new URLSearchParams(window.location.search).get(
-    "reset_token"
-  );
+  const resetToken = new URLSearchParams(window.location.search).get("reset_token");
+  const setError = useSetAtom(errorAtom);
 
   const onSubmit = async (data) => {
-    console.log(data);
-    console.log("resetToken", resetToken);
     try {
       const response = await resetPasswordFetch(
         resetToken,
@@ -28,9 +26,11 @@ const ResetPassword = () => {
       if (response.ok) {
         navigate(`/login`);
       } else {
+        setError("Reset password failed:", response);
         console.error("Reset password failed:", response);
       }
     } catch (error) {
+      setError("Error during reset password:", error.message);
       console.error("Error during reset password:", error.message);
     }
   };
@@ -47,9 +47,7 @@ const ResetPassword = () => {
           placeholder="Password here"
           autoComplete="current-password"
         />
-        {errors.password && errors.password.type === "required" && (
-          <p>Password can not be empty</p>
-        )}
+        {errors.password && errors.password.type === "required" && <p>Password can not be empty</p>}
         {errors.password && errors.password.type === "minLength" && (
           <p>Password should have 6 characters minimum</p>
         )}
@@ -57,15 +55,12 @@ const ResetPassword = () => {
         <input
           type="password"
           {...register("passwordConfirmation", {
-            validate: (value) =>
-              value === password || "The passwords do not match",
+            validate: (value) => value === password || "The passwords do not match",
           })}
           placeholder="Confirm Password here"
           autoComplete="current-password"
         />
-        {errors.passwordConfirmation && (
-          <p>{errors.passwordConfirmation.message}</p>
-        )}
+        {errors.passwordConfirmation && <p>{errors.passwordConfirmation.message}</p>}
 
         <input type="submit" />
       </form>
