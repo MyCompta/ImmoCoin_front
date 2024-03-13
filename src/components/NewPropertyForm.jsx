@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { createPropertyFetch } from "../services/propertyApi";
@@ -10,25 +11,32 @@ const NewPropertyForm = () => {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
+  const [images, setImages] = useState([]);
+  const imagesRef = useRef([]);
 
   const onSubmit = async (data) => {
     let authToken = {};
+    const formData = new FormData();
+    formData.append("property[title]", data.title);
+    formData.append("property[price]", data.price);
+    formData.append("property[description]", data.description);
+    formData.append("property[location]", data.location);
+
+    for (let i = 0; i < imagesRef.current.length; i++) {
+      formData.append("property[images][]", imagesRef.current[i]);
+    }
 
     if (!Cookies.get("auth_token")) {
       console.log("User is not logged in. Unable to create a property.");
       throw new Error("User is not logged in. Unable to create a property.");
     } else {
       authToken = JSON.parse(Cookies.get("auth_token"));
+      formData.append("property[user_id]", authToken.user_id);
     }
 
     try {
-      const response = await createPropertyFetch(
-        data.title,
-        data.price,
-        data.description,
-        data.location,
-        authToken.id
-      );
+      console.log("formData", formData);
+      const response = await createPropertyFetch(formData);
 
       if (response.ok) {
         const responseData = await response.json();
@@ -37,6 +45,10 @@ const NewPropertyForm = () => {
     } catch (error) {
       console.error("Error during create property:", error.message);
     }
+  };
+
+  const handleFileChange = (e) => {
+    imagesRef.current = e.target.files;
   };
 
   return (
@@ -89,6 +101,14 @@ const NewPropertyForm = () => {
         {errors.description && errors.description.type === "required" && (
           <p>Description can not be empty</p>
         )}
+
+        <input
+          type="file"
+          name="image"
+          multiple
+          {...register("image")}
+          onChange={handleFileChange}
+        />
 
         <input type="submit" />
       </form>
