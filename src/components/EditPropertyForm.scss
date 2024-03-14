@@ -1,0 +1,172 @@
+@mixin mobile-screen {
+  @media only screen and (max-width: 500px) {
+    @content;
+  }
+}
+
+.editPropertyContainer {
+  h1 {
+    margin-bottom: 40px;
+  }
+}
+
+.editPropertyForm {
+  form {
+    position: relative;
+    text-align: center;
+  }
+
+  &__info {
+    display: flex;
+    justify-content: center;
+
+    @include mobile-screen {
+      flex-direction: column;
+    }
+  }
+
+  &__row1 {
+    width: 50%;
+    text-align: left;
+
+    @include mobile-screen {
+      width: 100%;
+      text-align: center;
+    }
+
+    div {
+      margin: 1rem;
+      display: flex;
+      flex-direction: column;
+      label {
+        margin: 0.2rem;
+        font-weight: 600;
+      }
+
+      textarea {
+        min-height: 130px;
+      }
+    }
+  }
+
+  &__row2 {
+    width: 50%;
+    text-align: left;
+
+    @include mobile-screen {
+      width: 100%;
+      text-align: center;
+    }
+
+    div:nth-child(-n + 3) {
+      margin: 1rem;
+      display: flex;
+      flex-direction: column;
+      label {
+        margin: 0.2rem;
+        font-weight: 600;
+      }
+    }
+
+    div:nth-child(n + 4):nth-child(-n + 8) {
+      margin: 1rem;
+      label {
+        margin: 0.2rem;
+        font-weight: 600;
+      }
+
+      textarea {
+        min-height: 160px;
+      }
+    }
+  }
+
+  &__submit {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    padding: 0.5rem 3.5rem;
+    border-radius: 0.5rem;
+    color: white;
+    text-decoration: none;
+    margin: 0.5rem;
+    transition: 0.2s;
+    background-color: #222;
+    border: 1px solid white;
+    cursor: pointer;
+    position: absolute;
+    top: -78px;
+    right: 10px;
+
+    @include mobile-screen {
+      position: initial;
+      width: 80%;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__removeImage {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    background-color: #222;
+    color: white;
+    font-size: 1.5rem;
+    border-radius: 0.5rem;
+  }
+
+  &__selectFiles {
+    display: flex;
+    margin-top: 80px;
+
+    @include mobile-screen {
+      margin-top: 40px;
+    }
+
+    @include mobile-screen {
+      flex-direction: column;
+    }
+
+    p {
+      margin: 0 10px;
+      font-weight: 600;
+
+      @include mobile-screen {
+        margin-bottom: 1rem;
+      }
+    }
+
+    input {
+      margin: auto;
+    }
+  }
+
+  &__submit2 {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    padding: 0.5rem 3.5rem;
+    border-radius: 0.5rem;
+    color: white;
+    text-decoration: none;
+    margin: 2rem 0.5rem;
+    transition: 0.2s;
+    background-color: #222;
+    border: 1px solid white;
+    cursor: pointer;
+
+    @include mobile-screen {
+      position: initial;
+      width: 80%;
+    }
+  }
+}
+
+.imagesDrop {
+  min-height: auto;
+  border: 1px dashed rgb(80, 80, 80);
+  border-radius: 2px;
+  margin: 10px;
+  padding: 10px;
+}

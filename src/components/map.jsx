@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from "react";
-import Map from "react-map-gl";
+import Map, { Marker, FullscreenControl, Popup } from "react-map-gl";
 import { useAtomValue } from "jotai";
 import { cityAtom } from '../atom/userAtom.jsx';
 import mapboxSdk from '@mapbox/mapbox-sdk/services/geocoding';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
+import mapMarkerImage from '../assets/mapmarker.png'; 
 
-const TOKEN = 'pk.eyJ1IjoibWF0aGlldWFtYWNoZXIiLCJhIjoiY2x0cG44eW5tMHMwaTJqbXA0aXczYXBsYiJ9.QgMMcu07S_F3aLEmwSC6WQ';
+const TOKEN = import.meta.env.VITE_MAP_API_TOKEN;
 const geocodingClient = mapboxSdk({ accessToken: TOKEN });
 
 export default function DisplayMap () {
   const cityObject = useAtomValue(cityAtom);
   const city = cityObject && cityObject.city ? cityObject.city : null;
 
+  const [showPopup, setShowPopup] = useState('');
+
+  console.log('this is the popup', showPopup)
 
   const [viewport, setViewport] = useState({
     longitude: 2.39,
@@ -20,7 +24,7 @@ export default function DisplayMap () {
     zoom: 1,
   });
 
-  console.log("la city est", city)
+  // console.log("la city est", city)
 
   useEffect(() => {
     if (city) {
@@ -30,13 +34,13 @@ export default function DisplayMap () {
       })
       .send()
       .then((response) => {
-        console.log('Geocoding Response:', response); // Afficher la réponse en console
+        // console.log('Geocoding Response:', response);
         if (response && response.body && response.body.features && response.body.features.length > 0) {
           const feature = response.body.features[0];
           setViewport({
             longitude: feature.center[0],
             latitude: feature.center[1],
-            zoom: 10,
+            zoom: 4,
           });
         }
       })
@@ -61,7 +65,7 @@ export default function DisplayMap () {
     });
   };
 
-  console.log('le city Atom dans map', city)
+  // console.log('le city Atom dans map', city)
 
   return (
     <div style={{ width: "100%", height: "40vh" }} onWheel={handleScroll}>
@@ -71,6 +75,19 @@ export default function DisplayMap () {
         mapStyle="mapbox://styles/mathieuamacher/cltpxnrt0002401r18q92d8a3"
         onViewportChange={viewport => { setViewport(viewport); }}
       >
+
+      <Marker longitude={viewport.longitude} latitude={viewport.latitude} anchor="center" >
+        <img src={mapMarkerImage} alt="Map Marker" />
+      </Marker>
+
+      {showPopup && (
+      <Popup longitude={viewport.longitude} latitude={viewport.latitude}
+        anchor="bottom-left"
+        onClose={() => setShowPopup(false)}>
+        You are here
+      </Popup>)}
+
+      <FullscreenControl />
       </Map>
     </div>
   );
