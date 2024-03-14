@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { getPropertyFetch } from "../services/propertyApi";
 import { Link, useNavigate } from "react-router-dom";
 import { deletePropertyFetch } from "../services/propertyApi";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom, useSetAtom, useAtomValue } from "jotai";
 import Cookies from "js-cookie";
 import "./ShowProperty.css";
 import { errorAtom } from "../atom/errorAtom";
@@ -14,7 +14,7 @@ const ShowProperty = () => {
   const { id } = useParams();
   const [property, setProperty] = useState();
   const setUser = useSetAtom(userAtom);
-  const [city, setCity] = useAtom(cityAtom);
+  const setCity = useSetAtom(cityAtom);
   const navigate = useNavigate();
   const setError = useSetAtom(errorAtom);
 
@@ -44,15 +44,17 @@ const ShowProperty = () => {
         const fetchedProperty = await getPropertyFetch(id);
         setProperty(fetchedProperty);
 
+
         setUser((prevUser) => ({
           ...prevUser,
           user_id: fetchedProperty.user_id,
         }));
 
-        setCity((prevCity) => ({
-          ...prevCity,
-          city: fetchedProperty.location,
-        }));
+        const city = fetchedProperty.location;
+        setCity(city.split());
+        //console.log(city)
+
+
       } catch (error) {
         setError("Error during get property:", error.message);
         console.error("Error during get property:", error.message);
@@ -60,6 +62,7 @@ const ShowProperty = () => {
     };
     fetchProperty();
   }, [id, setUser, setError, setCity]);
+
 
   const displayFullScreenThumbnail = (e) => {
     e.preventDefault();
@@ -87,9 +90,11 @@ const ShowProperty = () => {
     fullScreen.src = property.images[newIndex].url;
   };
 
+
   return (
     property && (
       <>
+
         <div className="ShowPropertyContainer">
           <div className="top_property">
             <div className="propertytitle">
