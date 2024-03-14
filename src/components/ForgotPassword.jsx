@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
 import { forgotPasswordFetch } from "../services/authApi";
+import { useSetAtom } from "jotai";
+import { errorAtom } from "../atom/errorAtom";
 
 const ForgotPassword = () => {
   const {
@@ -7,11 +9,13 @@ const ForgotPassword = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const setError = useSetAtom(errorAtom);
 
   const onSubmit = async (data) => {
     try {
       await forgotPasswordFetch(data.email);
     } catch (error) {
+      setError("Error during forgot password:", error.message);
       console.error("Error during forgot password:", error.message);
     }
   };
@@ -31,12 +35,8 @@ const ForgotPassword = () => {
           placeholder="Email here"
           autoComplete="current-email"
         />
-        {errors.email && errors.email.type === "required" && (
-          <p>Email can not be empty</p>
-        )}
-        {errors.email && errors.email.type === "pattern" && (
-          <p>{errors.email.message}</p>
-        )}
+        {errors.email && errors.email.type === "required" && <p>Email can not be empty</p>}
+        {errors.email && errors.email.type === "pattern" && <p>{errors.email.message}</p>}
 
         <input type="submit" />
       </form>

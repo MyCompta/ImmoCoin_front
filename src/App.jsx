@@ -9,23 +9,23 @@ import PrivateRoutes from "./utils/PrivateRoutes";
 import "./App.css";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
-import CGV from './pages/CgvPage';
+import CGV from "./pages/CgvPage";
 import ShowPropertyPage from "./pages/properties/ShowPropertyPage";
 import NewPropertyPage from "./pages/properties/NewPropertyPage";
 import EditPropertyPage from "./pages/properties/EditPropertyPage";
 import IndexPropertyPage from "./pages/properties/IndexPropertyPage";
+import Error from "./components/Error";
 
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
+      <Error />
       <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/properties" element={<IndexPropertyPage />} />
           <Route path="/properties/:id" element={<ShowPropertyPage />} />
-          <Route path="/properties/new" element={<NewPropertyPage />} />
-          <Route path="/properties/edit/:id" element={<EditPropertyPage />} />
 
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -35,7 +35,9 @@ function App() {
 
           <Route element={<PrivateRoutes />}>
             <Route path="/private" element={<PrivatePage />} />
-            <Route path="/properties" element={<IndexPropertyPage />} />
+            <Route path="/properties/my" element={<IndexPropertyPage filter="owned" />} />
+            <Route path="/properties/new" element={<NewPropertyPage />} />
+            <Route path="/properties/edit/:id" element={<EditPropertyPage />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getPropertyFetch, updatePropertyFetch } from "../services/propertyApi";
 import Cookies from "js-cookie";
 import "./EditPropertyForm.scss";
+import { useSetAtom } from "jotai";
+import { errorAtom } from "../atom/errorAtom";
 
 const EditPropertyForm = () => {
   const {
@@ -18,6 +20,7 @@ const EditPropertyForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const imagesRef = useRef([]);
+  const setError = useSetAtom(errorAtom);
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -26,11 +29,12 @@ const EditPropertyForm = () => {
         setProperty(fetchedProperty);
         setImages(fetchedProperty.images);
       } catch (error) {
+        setError("Error during get property:", error.message);
         console.error("Error during get property:", error.message);
       }
     };
     fetchProperty();
-  }, []);
+  }, [id, setError]);
 
   const handleFileChange = (e) => {
     //imagesRef.current = [...e.target.files];
@@ -97,6 +101,7 @@ const EditPropertyForm = () => {
     }
 
     if (!Cookies.get("auth_token")) {
+      setError("You need to be logged in to do this action.");
       throw new Error("User is not logged in. Unable to edit the property.");
     } else {
       authToken = JSON.parse(Cookies.get("auth_token"));
