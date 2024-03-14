@@ -13,13 +13,11 @@ const EditPropertyForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [property, setProperty] = useState();
-  const [images, setImages] = useState([]);
+  const [property, setProperty] = useState(null);
+  const [initialProperty, setInitialProperty] = useState(null);
   const [dragging, setDragging] = useState(false);
-  const [selectedImages, setSelectedImages] = useState([]);
   const navigate = useNavigate();
   const { id } = useParams();
-  const imagesRef = useRef([]);
   const setError = useSetAtom(errorAtom);
 
   useEffect(() => {
@@ -27,7 +25,10 @@ const EditPropertyForm = () => {
       try {
         const fetchedProperty = await getPropertyFetch(id);
         setProperty(fetchedProperty);
-        setImages(fetchedProperty.images);
+
+        if (!initialProperty) {
+          setInitialProperty(fetchedProperty);
+        }
       } catch (error) {
         setError("Error during get property:", error.message);
         console.error("Error during get property:", error.message);
@@ -36,22 +37,29 @@ const EditPropertyForm = () => {
     fetchProperty();
   }, [id, setError]);
 
+  useEffect(() => {
+    console.log("initial property", initialProperty);
+    console.log("property", property);
+  }, [property, initialProperty]);
+
   const handleFileChange = (e) => {
-    //imagesRef.current = [...e.target.files];
-    imagesRef.current = [...imagesRef.current, ...e.target.files];
-    setImages((prevImages) => [...prevImages, ...e.target.files]);
+    setProperty((prevProperty) => {
+      const updatedProperty = { ...prevProperty };
+      updatedProperty.images = [...prevProperty.images, ...e.target.files];
+      return updatedProperty;
+    });
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
     setDragging(false);
     const files = Array.from(e.dataTransfer.files);
-    // Filtrer uniquement les fichiers d'image
-    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
-    // Ajouter les fichiers d'image au tableau d'images
-    setImages((prevImages) => [...prevImages, ...imageFiles]);
-    // Ajouter les fichiers d'image à la référence des images
-    imagesRef.current = [...imagesRef.current, ...imageFiles];
+    const imageFiles = files.filter((file) => file.type.startsWith("image/")); // only images accepted
+    setProperty((prevProperty) => {
+      const updatedProperty = { ...prevProperty };
+      updatedProperty.images = [...prevProperty.images, ...imageFiles];
+      return updatedProperty;
+    });
   };
 
   const handleDragOver = (e) => {
@@ -65,12 +73,20 @@ const EditPropertyForm = () => {
   };
 
   const handleRemoveImage = (index, imageId) => {
-    const newImages = [...images];
-    newImages.splice(index, 1);
-    setImages(newImages);
-
     if (imageId) {
-      setSelectedImages((prevSelectedImages) => [...prevSelectedImages, imageId]);
+      setProperty((prevProperty) => {
+        const updatedImages = prevProperty.images.filter(
+          (image) => image.id !== imageId
+        );
+        return { ...prevProperty, images: updatedImages };
+      });
+    } else {
+      setProperty((prevProperty) => {
+        const updatedImages = prevProperty.images.filter(
+          (image, i) => i !== index
+        );
+        return { ...prevProperty, images: updatedImages };
+      });
     }
   };
 
@@ -89,12 +105,25 @@ const EditPropertyForm = () => {
     formData.append("property[garden]", data.garden);
     formData.append("property[caretaker]", data.caretaker);
     formData.append("property[lift]", data.lift);
-    formData.append("deleted_images", JSON.stringify(selectedImages)); // images to delete
 
-    console.log("imagesRef.current", imagesRef.current);
+    //Find added images & append them to formData
+    if (property) {
+      const imagesWithoutId = property.images.filter((image) => !image.id);
+      console.log("Images ajoutées:", imagesWithoutId);
+      for (let i = 0; i < imagesWithoutId.length; i++) {
+        formData.append("property[images][]", imagesWithoutId[i]);
+      }
+    }
 
-    for (let i = 0; i < imagesRef.current.length; i++) {
-      formData.append("property[images][]", imagesRef.current[i]); // images to add
+    // Find deleted images & append them in formData
+    if (property && initialProperty) {
+      const deletedImages = initialProperty.images.filter(
+        (initialImage) =>
+          !property.images.some((image) => image.id === initialImage.id)
+      );
+      console.log("Images supprimées:", deletedImages);
+      const deletedImageIds = deletedImages.map((image) => image.id);
+      formData.append("deleted_images", JSON.stringify(deletedImageIds));
     }
 
     if (!Cookies.get("auth_token")) {
@@ -117,15 +146,15 @@ const EditPropertyForm = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("selectedImages", selectedImages);
-  }, [selectedImages]);
-
   return (
     property && (
       <div className="editPropertyForm" style={{ textAlign: "left" }}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <input className="editPropertyForm__submit" type="submit" value="Save changes" />
+          <input
+            className="editPropertyForm__submit"
+            type="submit"
+            value="Save changes"
+          />
 
           <div className="editPropertyForm__info">
             <div className="editPropertyForm__row1">
@@ -295,7 +324,12 @@ const EditPropertyForm = () => {
               </div>
               <div>
                 <label htmlFor="lift">Lift</label>
-                <input id="lift" type="checkbox" {...register("lift")} checked={property.lift} />
+                <input
+                  id="lift"
+                  type="checkbox"
+                  {...register("lift")}
+                  checked={property.lift}
+                />
               </div>
             </div>
           </div>
@@ -316,15 +350,17 @@ const EditPropertyForm = () => {
             className="imagesDrop"
             onDrop={handleDrop}
             onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}>
-            {images.map((image, index) => (
+            onDragLeave={handleDragLeave}
+          >
+            {property.images.map((image, index) => (
               <div
                 key={index}
                 style={{
                   position: "relative",
                   display: "inline-block",
                   width: "25%",
-                }}>
+                }}
+              >
                 <img
                   src={image.url ? image.url : URL.createObjectURL(image)}
                   alt={`Image ${index}`}
@@ -340,14 +376,19 @@ const EditPropertyForm = () => {
                   onClick={(e) => {
                     e.preventDefault(); // Empêche la soumission du formulaire
                     handleRemoveImage(index, image.id); // Supprime l'image
-                  }}>
-                  &#x2715; {/* Cross symbol */}
+                  }}
+                >
+                  &#x2715;
                 </button>
               </div>
             ))}
           </div>
 
-          <input className="editPropertyForm__submit2" type="submit" value="Save changes" />
+          <input
+            className="editPropertyForm__submit2"
+            type="submit"
+            value="Save changes"
+          />
         </form>
       </div>
     )
