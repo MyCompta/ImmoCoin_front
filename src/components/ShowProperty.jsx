@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { getPropertyFetch } from "../services/propertyApi";
 import { Link, useNavigate } from "react-router-dom";
 import { deletePropertyFetch } from "../services/propertyApi";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom, useSetAtom, useAtomValue } from "jotai";
 import Cookies from "js-cookie";
 import "./ShowProperty.css";
 import { errorAtom } from "../atom/errorAtom";
@@ -14,7 +14,7 @@ const ShowProperty = () => {
   const { id } = useParams();
   const [property, setProperty] = useState();
   const setUser = useSetAtom(userAtom);
-  const [city, setCity] = useAtom(cityAtom);
+  const setCity = useSetAtom(cityAtom);
   const navigate = useNavigate();
   const setError = useSetAtom(errorAtom);
 
@@ -44,15 +44,15 @@ const ShowProperty = () => {
         const fetchedProperty = await getPropertyFetch(id);
         setProperty(fetchedProperty);
 
+
         setUser((prevUser) => ({
           ...prevUser,
           user_id: fetchedProperty.user_id,
         }));
 
-        setCity((prevCity) => ({
-          ...prevCity,
-          city: fetchedProperty.location,
-        }));
+        const city = fetchedProperty.location;
+        setCity(city.split());
+        //console.log(city)
 
 
       } catch (error) {
@@ -62,6 +62,7 @@ const ShowProperty = () => {
     };
     fetchProperty();
   }, [id, setUser, setError, setCity]);
+
 
   const displayFullScreenThumbnail = (e) => {
     e.preventDefault();
@@ -86,12 +87,14 @@ const ShowProperty = () => {
       newIndex = 0;
     }
     fullScreen.setAttribute("data-index", newIndex);
-    fullScreen.src = property.images[newIndex];
+    fullScreen.src = property.images[newIndex].url;
   };
+
 
   return (
     property && (
       <>
+
         <div className="ShowPropertyContainer">
           <div className="top_property">
             <div className="propertytitle">
@@ -101,7 +104,7 @@ const ShowProperty = () => {
               <img
                 src={
                   property.images?.length
-                    ? property.images[0]
+                    ? property.images[0].url
                     : "https://via.placeholder.com/600x400"
                 }
                 alt={property.title}
@@ -117,7 +120,7 @@ const ShowProperty = () => {
                   .map((image, index) => (
                     <img
                       key={index}
-                      src={image}
+                      src={image.url}
                       alt={property.title}
                       onClick={displayFullScreenThumbnail}
                       data-index={index + 1}
@@ -160,9 +163,6 @@ const ShowProperty = () => {
             </div>
             <img
               id="fullScreen"
-              src={
-                property.images?.length ? property.images[0] : "https://via.placeholder.com/600x400"
-              }
               alt={property.title}
               onClick={displayFullScreenThumbnail}
               data-index="0"

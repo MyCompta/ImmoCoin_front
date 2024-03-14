@@ -4,8 +4,7 @@ const EditPropertyPage = () => {
   return (
     <div
       className="editPropertyContainer"
-      style={{ margin: "10px", padding: "10px" }}
-    >
+      style={{ margin: "10px", padding: "10px", textAlign: "center" }}>
       <h1>Edit Property</h1>
       <EditPropertyForm />
     </div>

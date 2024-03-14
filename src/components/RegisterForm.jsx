@@ -32,7 +32,10 @@ const RegisterForm = () => {
             token: response.headers.get("Authorization"),
             user_id: responseBody.user.id,
             email: responseBody.user.email,
-          })
+          }),
+          {
+            expires: 1,
+          }
         );
         dispatch(login());
         navigate(`/`);
@@ -44,7 +47,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="registerForm">
+    <div className="registerForm" style={{ textAlign: "left" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           type="email"
@@ -57,9 +60,14 @@ const RegisterForm = () => {
           })}
           placeholder="Email here"
           autoComplete="current-email"
+          className={errors.email ? "error" : ""}
         />
-        {errors.email && errors.email.type === "required" && <p>Email can not be empty</p>}
-        {errors.email && errors.email.type === "pattern" && <p>{errors.email.message}</p>}
+        {errors.email && errors.email.type === "required" && (
+          <p className="error">Email can not be empty</p>
+        )}
+        {errors.email && errors.email.type === "pattern" && (
+          <p className="error">{errors.email.message}</p>
+        )}
         <input
           type="password"
           {...register("password", {
@@ -68,10 +76,13 @@ const RegisterForm = () => {
           })}
           placeholder="Password here"
           autoComplete="current-password"
+          className={errors.password ? "error" : ""}
         />
-        {errors.password && errors.password.type === "required" && <p>Password can not be empty</p>}
+        {errors.password && errors.password.type === "required" && (
+          <p className="error">Password can not be empty</p>
+        )}
         {errors.password && errors.password.type === "minLength" && (
-          <p>Password should have 6 characters minimum</p>
+          <p className="error">Password should have 6 characters minimum</p>
         )}
         <input
           type="password"
@@ -80,21 +91,28 @@ const RegisterForm = () => {
           })}
           placeholder="Confirm Password here"
           autoComplete="current-password"
+          className={errors.passwordConfirmation ? "error" : ""}
         />
-        {errors.passwordConfirmation && <p>{errors.passwordConfirmation.message}</p>}
-        <input
-          type="checkbox"
-          {...register("cguvalidation", {
-            required: "You must validate CGV",
-          })}
-          checked={checkboxCGV}
-          onChange={(e) => {
-            setCheckboxCGV(e.target.checked);
-          }}
-        />
-        I have read and agree to the <Link to={"/cgv"}>CGV</Link>
-        {errors.cguvalidation && <p>{errors.cguvalidation.message}</p>}
-        <br></br>
+        {errors.passwordConfirmation && (
+          <p className="error">{errors.passwordConfirmation.message}</p>
+        )}
+        <div>
+          <input
+            type="checkbox"
+            {...register("cguvalidation", {
+              required: "You must validate CGV",
+            })}
+            checked={checkboxCGV}
+            onChange={(e) => {
+              setCheckboxCGV(e.target.checked);
+            }}
+            id="cguvalidation"
+          />
+          <label htmlFor="cguvalidation">
+            I have read and agree to the <Link to={"/cgv"}>CGV</Link>
+          </label>
+        </div>
+        {errors.cguvalidation && <p className="error">{errors.cguvalidation.message}</p>}
         <input type="submit" />
       </form>
     </div>
