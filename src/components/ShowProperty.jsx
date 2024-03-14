@@ -158,9 +158,6 @@ const ShowProperty = () => {
             </div>
             <img
               id="fullScreen"
-              src={
-                property.images?.length ? property.images[0] : "https://via.placeholder.com/600x400"
-              }
               alt={property.title}
               onClick={displayFullScreenThumbnail}
               data-index="0"
