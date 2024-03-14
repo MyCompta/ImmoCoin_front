@@ -70,10 +70,7 @@ const EditPropertyForm = () => {
     setImages(newImages);
 
     if (imageId) {
-      setSelectedImages((prevSelectedImages) => [
-        ...prevSelectedImages,
-        imageId,
-      ]);
+      setSelectedImages((prevSelectedImages) => [...prevSelectedImages, imageId]);
     }
   };
 
@@ -126,13 +123,9 @@ const EditPropertyForm = () => {
 
   return (
     property && (
-      <div className="editPropertyForm">
+      <div className="editPropertyForm" style={{ textAlign: "left" }}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <input
-            className="editPropertyForm__submit"
-            type="submit"
-            value="Save changes"
-          />
+          <input className="editPropertyForm__submit" type="submit" value="Save changes" />
 
           <div className="editPropertyForm__info">
             <div className="editPropertyForm__row1">
@@ -146,10 +139,11 @@ const EditPropertyForm = () => {
                   placeholder="Title here"
                   autoComplete="current-title"
                   defaultValue={property.title}
+                  className={errors.title ? "error" : ""}
                 />
               </div>
               {errors.title && errors.title.type === "required" && (
-                <p>Title can not be empty</p>
+                <p className="error">Title can not be empty</p>
               )}
 
               <div>
@@ -163,10 +157,11 @@ const EditPropertyForm = () => {
                   placeholder="Price here"
                   autoComplete="current-price"
                   defaultValue={property.price}
+                  className={errors.price ? "error" : ""}
                 />
               </div>
               {errors.price && errors.price.type === "required" && (
-                <p>Price can not be empty</p>
+                <p className="error">Price can not be empty</p>
               )}
 
               <div>
@@ -179,10 +174,11 @@ const EditPropertyForm = () => {
                   placeholder="Location here"
                   autoComplete="current-location"
                   defaultValue={property.location}
+                  className={errors.location ? "error" : ""}
                 />
               </div>
               {errors.location && errors.location.type === "required" && (
-                <p>Location can not be empty</p>
+                <p className="error">Location can not be empty</p>
               )}
 
               <div>
@@ -195,10 +191,11 @@ const EditPropertyForm = () => {
                   placeholder="Description here"
                   autoComplete="current-description"
                   defaultValue={property.description}
+                  className={errors.description ? "error" : ""}
                 />
               </div>
               {errors.description && errors.description.type === "required" && (
-                <p>Description can not be empty</p>
+                <p className="error">Description can not be empty</p>
               )}
             </div>
 
@@ -215,10 +212,11 @@ const EditPropertyForm = () => {
                   step={1}
                   placeholder="room"
                   defaultValue={property.room}
+                  className={errors.room ? "error" : ""}
                 />
               </div>
               {errors.room && errors.room.type === "required" && (
-                <p>Room number can not be empty</p>
+                <p className="error">Room number can not be empty</p>
               )}
 
               <div>
@@ -233,10 +231,11 @@ const EditPropertyForm = () => {
                   step={1}
                   placeholder="floor"
                   defaultValue={property.floor}
+                  className={errors.room ? "error" : ""}
                 />
               </div>
               {errors.room && errors.room.type === "required" && (
-                <p>Floor number can not be empty</p>
+                <p className="error">Floor number can not be empty</p>
               )}
 
               <div>
@@ -251,10 +250,11 @@ const EditPropertyForm = () => {
                   step={1}
                   placeholder="surface"
                   defaultValue={property.surface}
+                  className={errors.surface ? "error" : ""}
                 />
               </div>
               {errors.surface && errors.surface.type === "required" && (
-                <p>Surface can not be empty</p>
+                <p className="error">Surface can not be empty</p>
               )}
 
               <div>
@@ -295,12 +295,7 @@ const EditPropertyForm = () => {
               </div>
               <div>
                 <label htmlFor="lift">Lift</label>
-                <input
-                  id="lift"
-                  type="checkbox"
-                  {...register("lift")}
-                  checked={property.lift}
-                />
+                <input id="lift" type="checkbox" {...register("lift")} checked={property.lift} />
               </div>
             </div>
           </div>
@@ -321,8 +316,7 @@ const EditPropertyForm = () => {
             className="imagesDrop"
             onDrop={handleDrop}
             onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-          >
+            onDragLeave={handleDragLeave}>
             {images.map((image, index) => (
               <div
                 key={index}
@@ -330,8 +324,7 @@ const EditPropertyForm = () => {
                   position: "relative",
                   display: "inline-block",
                   width: "25%",
-                }}
-              >
+                }}>
                 <img
                   src={image.url ? image.url : URL.createObjectURL(image)}
                   alt={`Image ${index}`}
@@ -347,19 +340,14 @@ const EditPropertyForm = () => {
                   onClick={(e) => {
                     e.preventDefault(); // Empêche la soumission du formulaire
                     handleRemoveImage(index, image.id); // Supprime l'image
-                  }}
-                >
+                  }}>
                   &#x2715; {/* Cross symbol */}
                 </button>
               </div>
             ))}
           </div>
 
-          <input
-            className="editPropertyForm__submit2"
-            type="submit"
-            value="Save changes"
-          />
+          <input className="editPropertyForm__submit2" type="submit" value="Save changes" />
         </form>
       </div>
     )

@@ -36,7 +36,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="registerForm">
+    <div className="registerForm" style={{ textAlign: "left" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           type="password"
@@ -46,10 +46,13 @@ const ResetPassword = () => {
           })}
           placeholder="Password here"
           autoComplete="current-password"
+          className={errors.password ? "error" : ""}
         />
-        {errors.password && errors.password.type === "required" && <p>Password can not be empty</p>}
+        {errors.password && errors.password.type === "required" && (
+          <p className="error">Password can not be empty</p>
+        )}
         {errors.password && errors.password.type === "minLength" && (
-          <p>Password should have 6 characters minimum</p>
+          <p className="error">Password should have 6 characters minimum</p>
         )}
 
         <input
@@ -59,8 +62,11 @@ const ResetPassword = () => {
           })}
           placeholder="Confirm Password here"
           autoComplete="current-password"
+          className={errors.passwordConfirmation ? "error" : ""}
         />
-        {errors.passwordConfirmation && <p>{errors.passwordConfirmation.message}</p>}
+        {errors.passwordConfirmation && (
+          <p className="error">{errors.passwordConfirmation.message}</p>
+        )}
 
         <input type="submit" />
       </form>

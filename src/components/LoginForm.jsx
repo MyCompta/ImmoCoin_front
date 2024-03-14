@@ -41,7 +41,7 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="loginForm">
+    <div className="loginForm" style={{ textAlign: "left" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           type="email"
@@ -54,9 +54,15 @@ const LoginForm = () => {
           })}
           placeholder="Email here"
           autoComplete="current-email"
+          autoFocus
+          className={errors.email ? "error" : ""}
         />
-        {errors.email && errors.email.type === "required" && <p>Email can not be empty</p>}
-        {errors.email && errors.email.type === "pattern" && <p>{errors.email.message}</p>}
+        {errors.email && errors.email.type === "required" && (
+          <p className="error">Email can not be empty</p>
+        )}
+        {errors.email && errors.email.type === "pattern" && (
+          <p className="error">{errors.email.message}</p>
+        )}
 
         <input
           type="password"
@@ -66,10 +72,13 @@ const LoginForm = () => {
           })}
           placeholder="Password here"
           autoComplete="current-password"
+          className={errors.password ? "error" : ""}
         />
-        {errors.password && errors.password.type === "required" && <p>Password can not be empty</p>}
+        {errors.password && errors.password.type === "required" && (
+          <p className="error">Password can not be empty</p>
+        )}
         {errors.password && errors.password.type === "minLength" && (
-          <p>Password should have 6 characters minimum</p>
+          <p className="error">Password should have 6 characters minimum</p>
         )}
 
         <input type="submit" />
