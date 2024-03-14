@@ -26,8 +26,6 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/properties" element={<IndexPropertyPage />} />
           <Route path="/properties/:id" element={<ShowPropertyPage />} />
-          <Route path="/properties/new" element={<NewPropertyPage />} />
-          <Route path="/properties/edit/:id" element={<EditPropertyPage />} />
 
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -37,7 +35,9 @@ function App() {
 
           <Route element={<PrivateRoutes />}>
             <Route path="/private" element={<PrivatePage />} />
-            <Route path="/properties" element={<IndexPropertyPage />} />
+            <Route path="/properties/my" element={<IndexPropertyPage filter="owned" />} />
+            <Route path="/properties/new" element={<NewPropertyPage />} />
+            <Route path="/properties/edit/:id" element={<EditPropertyPage />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
