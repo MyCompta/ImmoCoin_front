@@ -90,47 +90,16 @@ export const getPropertyFetch = async (id) => {
 };
 
 // UPDATE PROPERTY FETCH
-export const updatePropertyFetch = async (
-  title,
-  price,
-  description,
-  furnished,
-  surface,
-  room,
-  floor,
-  terrace,
-  garden,
-  caretaker,
-  lift,
-  location,
-  id
-) => {
+export const updatePropertyFetch = async (formData, id) => {
   try {
     const authToken = JSON.parse(Cookies.get("auth_token"));
 
-    const data = {
-      property: {
-        title: title,
-        price: price,
-        description: description,
-        furnished: furnished,
-        surface: surface,
-        room: room,
-        floor: floor,
-        terrace: terrace,
-        garden: garden,
-        caretaker: caretaker,
-        lift: lift,
-        location: location,
-      },
-    };
-    const response = await fetch(apiUrl + "properties/" + id, {
+    const response = await fetch(apiUrl + "/properties/" + id, {
       method: "PATCH",
       headers: {
         Authorization: authToken.token,
-        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: formData,
     });
     //console.log("Response Headers:", [...response.headers.entries()]);
     //console.log(data)
