@@ -354,6 +354,12 @@ const EditPropertyForm = () => {
               </div>
             ))}
           </div>
+
+          <input
+            className="editPropertyForm__submit2"
+            type="submit"
+            value="Save changes"
+          />
         </form>
       </div>
     )
