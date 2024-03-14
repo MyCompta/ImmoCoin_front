@@ -38,7 +38,7 @@ const RegisterForm = () => {
           }
         );
         dispatch(login());
-        navigate(`/`);
+        navigate(`/properties/new`);
       }
     } catch (error) {
       setError("Error during register:", error.message);
@@ -87,7 +87,8 @@ const RegisterForm = () => {
         <input
           type="password"
           {...register("passwordConfirmation", {
-            validate: (value) => value === password || "The passwords do not match",
+            validate: (value) =>
+              value === password || "The passwords do not match",
           })}
           placeholder="Confirm Password here"
           autoComplete="current-password"
@@ -112,7 +113,9 @@ const RegisterForm = () => {
             I have read and agree to the <Link to={"/cgv"}>CGV</Link>
           </label>
         </div>
-        {errors.cguvalidation && <p className="error">{errors.cguvalidation.message}</p>}
+        {errors.cguvalidation && (
+          <p className="error">{errors.cguvalidation.message}</p>
+        )}
         <input type="submit" />
       </form>
     </div>

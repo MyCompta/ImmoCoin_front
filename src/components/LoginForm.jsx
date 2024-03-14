@@ -35,7 +35,7 @@ const LoginForm = () => {
           }
         );
         dispatch(login());
-        navigate(`/`);
+        navigate(`/properties/new`);
       }
     } catch (error) {
       setError("Error during login:", error.message);
