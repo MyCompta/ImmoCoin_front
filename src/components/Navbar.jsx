@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/reducers/authReducer";
 import { useEffect, useState } from "react";
 import "./Navbar.css";
+import logo from "../assets/logo-white.svg";
 
 const Navbar = () => {
   const isLogged = useSelector((state) => state.auth.isLogged);
@@ -47,7 +48,7 @@ const Navbar = () => {
     <nav className={"navbar" + (isMenuOpen ? " opened" : "")}>
       <div className="navbar__logo">
         <Link to={"/"}>
-          <h1>ImmoCoin</h1>
+          <img src={logo} />
         </Link>
       </div>
       <div

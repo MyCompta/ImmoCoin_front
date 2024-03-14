@@ -40,6 +40,13 @@
 .navbar__logo h1 {
   margin: 0;
 }
+.navbar__logo img {
+  height: 1.5rem;
+}
+.navbar__logo img:hover {
+  filter: brightness(0) saturate(100%) invert(55%) sepia(59%) saturate(501%) hue-rotate(171deg)
+    brightness(98%) contrast(90%);
+}
 
 /* Hamburger menu && responsive */
 
