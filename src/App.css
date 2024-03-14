@@ -1,3 +1,49 @@
 body {
   margin: 0;
 }
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin: 3rem auto;
+  max-width: 400px;
+  padding: 0 2rem;
+  gap: 1rem;
+}
+
+form input {
+  border: none;
+  border-bottom: 1px solid #222;
+  padding: 0.25rem;
+  color: #222;
+}
+
+form input:focus-visible {
+  outline: none;
+}
+
+form input.error {
+  border-bottom: 1px solid #fc5959;
+  color: #fc5959;
+}
+
+form input.error::placeholder {
+  color: #fc5959;
+}
+
+form p.error {
+  color: #fc5959;
+  margin: 0;
+}
+
+form input[type="submit"] {
+  background-color: #222;
+  color: white;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+form input[type="submit"]:hover {
+  background-color: #333;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}

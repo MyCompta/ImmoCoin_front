@@ -62,7 +62,7 @@ const NewPropertyForm = () => {
   };
 
   return (
-    <div className="newPropertyForm">
+    <div className="newPropertyForm" style={{ textAlign: "left" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           type="text"
@@ -71,8 +71,11 @@ const NewPropertyForm = () => {
           })}
           placeholder="Title here"
           autoComplete="current-title"
+          className={errors.title ? "error" : ""}
         />
-        {errors.title && errors.title.type === "required" && <p>Title can not be empty</p>}
+        {errors.title && errors.title.type === "required" && (
+          <p className="error">Title can not be empty</p>
+        )}
 
         <input
           type="number"
@@ -82,8 +85,11 @@ const NewPropertyForm = () => {
           })}
           placeholder="Price here"
           autoComplete="current-price"
+          className={errors.price ? "error" : ""}
         />
-        {errors.price && errors.price.type === "required" && <p>Price can not be empty</p>}
+        {errors.price && errors.price.type === "required" && (
+          <p className="error">Price can not be empty</p>
+        )}
 
         <input
           type="text"
@@ -92,8 +98,11 @@ const NewPropertyForm = () => {
           })}
           placeholder="Location here"
           autoComplete="current-location"
+          className={errors.location ? "error" : ""}
         />
-        {errors.location && errors.location.type === "required" && <p>Location can not be empty</p>}
+        {errors.location && errors.location.type === "required" && (
+          <p className="error">Location can not be empty</p>
+        )}
 
         <input
           type="text"
@@ -102,9 +111,10 @@ const NewPropertyForm = () => {
           })}
           placeholder="Description here"
           autoComplete="current-description"
+          className={errors.description ? "error" : ""}
         />
         {errors.description && errors.description.type === "required" && (
-          <p>Description can not be empty</p>
+          <p className="error">Description can not be empty</p>
         )}
 
         <input
@@ -113,6 +123,8 @@ const NewPropertyForm = () => {
           multiple
           {...register("image")}
           onChange={handleFileChange}
+          className={errors.image ? "error" : ""}
+          accept="image/*"
         />
 
         <input
@@ -124,8 +136,11 @@ const NewPropertyForm = () => {
           min={0}
           step={1}
           placeholder="room"
+          className={errors.room ? "error" : ""}
         />
-        {errors.room && errors.room.type === "required" && <p>Room number can not be empty</p>}
+        {errors.room && errors.room.type === "required" && (
+          <p className="error">Room number can not be empty</p>
+        )}
 
         <input
           type="number"
@@ -136,8 +151,11 @@ const NewPropertyForm = () => {
           min={-2}
           step={1}
           placeholder="floor"
+          className={errors.room ? "error" : ""}
         />
-        {errors.room && errors.room.type === "required" && <p>Floor number can not be empty</p>}
+        {errors.room && errors.room.type === "required" && (
+          <p className="error">Floor number can not be empty</p>
+        )}
 
         <input
           type="number"
@@ -148,8 +166,11 @@ const NewPropertyForm = () => {
           min={8}
           step={1}
           placeholder="surface"
+          className={errors.surface ? "error" : ""}
         />
-        {errors.surface && errors.surface.type === "required" && <p>Surface can not be empty</p>}
+        {errors.surface && errors.surface.type === "required" && (
+          <p className="error">Surface can not be empty</p>
+        )}
 
         <div>
           <label htmlFor="furnished">Furnished</label>

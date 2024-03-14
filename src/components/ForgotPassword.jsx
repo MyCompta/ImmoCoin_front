@@ -21,7 +21,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="loginForm">
+    <div className="loginForm" style={{ textAlign: "left" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           type="email"
@@ -34,9 +34,14 @@ const ForgotPassword = () => {
           })}
           placeholder="Email here"
           autoComplete="current-email"
+          className={errors.email ? "error" : ""}
         />
-        {errors.email && errors.email.type === "required" && <p>Email can not be empty</p>}
-        {errors.email && errors.email.type === "pattern" && <p>{errors.email.message}</p>}
+        {errors.email && errors.email.type === "required" && (
+          <p className="error">Email can not be empty</p>
+        )}
+        {errors.email && errors.email.type === "pattern" && (
+          <p className="error">{errors.email.message}</p>
+        )}
 
         <input type="submit" />
       </form>

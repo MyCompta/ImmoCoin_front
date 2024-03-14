@@ -8,7 +8,7 @@ import { cityAtom } from "../atom/userAtom.jsx";
 import PropTypes from "prop-types";
 import "./IndexProperties.css";
 import PropertyCard from "./PropertyCard";
-import DisplayMap from "./map.jsx"
+import DisplayMap from "./map.jsx";
 
 const IndexProperties = ({ filter }) => {
   const [properties, setProperties] = useState("");
@@ -37,7 +37,10 @@ const IndexProperties = ({ filter }) => {
     fetchProperties();
   }, [setError, filter, setCity]);
 
-  const authToken = JSON.parse(Cookies.get("auth_token"));
+  let authToken;
+  if (Cookies.get("auth_token")) {
+    authToken = JSON.parse(Cookies.get("auth_token"));
+  }
 
 
   // console.log("les properties en index", properties)
@@ -68,7 +71,7 @@ const IndexProperties = ({ filter }) => {
             <PropertyCard
               key={property.id}
               property={property}
-              owned={authToken.user_id === property.user_id}
+              owned={authToken?.user_id === property.user_id}
             />
           ))
         ) : (
