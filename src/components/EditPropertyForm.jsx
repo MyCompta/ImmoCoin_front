@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { getPropertyFetch, updatePropertyFetch } from "../services/propertyApi";
 import Cookies from "js-cookie";
+import "./EditPropertyForm.scss";
 
 const EditPropertyForm = () => {
   const {
@@ -120,170 +121,202 @@ const EditPropertyForm = () => {
 
   return (
     property && (
-      <div className="newPropertyForm">
+      <div className="editPropertyForm">
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
-            type="text"
-            {...register("title", {
-              required: true,
-            })}
-            placeholder="Title here"
-            autoComplete="current-title"
-            defaultValue={property.title}
+            className="editPropertyForm__submit"
+            type="submit"
+            value="Save changes"
           />
-          {errors.title && errors.title.type === "required" && (
-            <p>Title can not be empty</p>
-          )}
 
-          <input
-            type="number"
-            {...register("price", {
-              required: true,
-              valueAsNumber: true,
-            })}
-            placeholder="Price here"
-            autoComplete="current-price"
-            defaultValue={property.price}
-          />
-          {errors.price && errors.price.type === "required" && (
-            <p>Price can not be empty</p>
-          )}
+          <div className="editPropertyForm__info">
+            <div className="editPropertyForm__row1">
+              <div>
+                <label htmlFor="title">Title</label>
+                <input
+                  type="text"
+                  {...register("title", {
+                    required: true,
+                  })}
+                  placeholder="Title here"
+                  autoComplete="current-title"
+                  defaultValue={property.title}
+                />
+              </div>
+              {errors.title && errors.title.type === "required" && (
+                <p>Title can not be empty</p>
+              )}
 
-          <input
-            type="text"
-            {...register("location", {
-              required: true,
-            })}
-            placeholder="Location here"
-            autoComplete="current-location"
-            defaultValue={property.location}
-          />
-          {errors.location && errors.location.type === "required" && (
-            <p>Location can not be empty</p>
-          )}
+              <div>
+                <label htmlFor="price">Price</label>
+                <input
+                  type="number"
+                  {...register("price", {
+                    required: true,
+                    valueAsNumber: true,
+                  })}
+                  placeholder="Price here"
+                  autoComplete="current-price"
+                  defaultValue={property.price}
+                />
+              </div>
+              {errors.price && errors.price.type === "required" && (
+                <p>Price can not be empty</p>
+              )}
 
-          <input
-            type="text"
-            {...register("description", {
-              required: true,
-            })}
-            placeholder="Description here"
-            autoComplete="current-description"
-            defaultValue={property.description}
-          />
-          {errors.description && errors.description.type === "required" && (
-            <p>Description can not be empty</p>
-          )}
+              <div>
+                <label htmlFor="location">Location</label>
+                <input
+                  type="text"
+                  {...register("location", {
+                    required: true,
+                  })}
+                  placeholder="Location here"
+                  autoComplete="current-location"
+                  defaultValue={property.location}
+                />
+              </div>
+              {errors.location && errors.location.type === "required" && (
+                <p>Location can not be empty</p>
+              )}
 
-          <input
-            type="number"
-            {...register("room", {
-              required: true,
-              valueAsNumber: true,
-            })}
-            min={0}
-            step={1}
-            placeholder="room"
-            defaultValue={property.room}
-          />
-          {errors.room && errors.room.type === "required" && (
-            <p>Room number can not be empty</p>
-          )}
+              <div>
+                <label htmlFor="description">Description</label>
+                <textarea
+                  type="text"
+                  {...register("description", {
+                    required: true,
+                  })}
+                  placeholder="Description here"
+                  autoComplete="current-description"
+                  defaultValue={property.description}
+                />
+              </div>
+              {errors.description && errors.description.type === "required" && (
+                <p>Description can not be empty</p>
+              )}
+            </div>
 
-          <input
-            type="number"
-            {...register("floor", {
-              required: true,
-              valueAsNumber: true,
-            })}
-            min={-2}
-            step={1}
-            placeholder="floor"
-            defaultValue={property.floor}
-          />
-          {errors.room && errors.room.type === "required" && (
-            <p>Floor number can not be empty</p>
-          )}
+            <div className="editPropertyForm__row2">
+              <div>
+                <label htmlFor="room">Number of rooms</label>
+                <input
+                  type="number"
+                  {...register("room", {
+                    required: true,
+                    valueAsNumber: true,
+                  })}
+                  min={0}
+                  step={1}
+                  placeholder="room"
+                  defaultValue={property.room}
+                />
+              </div>
+              {errors.room && errors.room.type === "required" && (
+                <p>Room number can not be empty</p>
+              )}
 
-          <input
-            type="number"
-            {...register("surface", {
-              required: true,
-              valueAsNumber: true,
-            })}
-            min={8}
-            step={1}
-            placeholder="surface"
-            defaultValue={property.surface}
-          />
-          {errors.surface && errors.surface.type === "required" && (
-            <p>Surface can not be empty</p>
-          )}
+              <div>
+                <label htmlFor="floor">Number of floors</label>
+                <input
+                  type="number"
+                  {...register("floor", {
+                    required: true,
+                    valueAsNumber: true,
+                  })}
+                  min={-2}
+                  step={1}
+                  placeholder="floor"
+                  defaultValue={property.floor}
+                />
+              </div>
+              {errors.room && errors.room.type === "required" && (
+                <p>Floor number can not be empty</p>
+              )}
 
-          <div>
-            <label htmlFor="furnished">Furnished</label>
+              <div>
+                <label htmlFor="surface">Surface</label>
+                <input
+                  type="number"
+                  {...register("surface", {
+                    required: true,
+                    valueAsNumber: true,
+                  })}
+                  min={8}
+                  step={1}
+                  placeholder="surface"
+                  defaultValue={property.surface}
+                />
+              </div>
+              {errors.surface && errors.surface.type === "required" && (
+                <p>Surface can not be empty</p>
+              )}
+
+              <div>
+                <label htmlFor="furnished">Furnished</label>
+                <input
+                  id="furnished"
+                  type="checkbox"
+                  {...register("furnished")}
+                  checked={property.furnished}
+                />
+              </div>
+              <div>
+                <label htmlFor="terrace">Terrace</label>
+                <input
+                  id="terrace"
+                  type="checkbox"
+                  {...register("terrace")}
+                  checked={property.terrace}
+                />
+              </div>
+              <div>
+                <label htmlFor="garden">Garden</label>
+                <input
+                  id="garden"
+                  type="checkbox"
+                  {...register("garden")}
+                  checked={property.garden}
+                />
+              </div>
+              <div>
+                <label htmlFor="caretaker">Caretaker</label>
+                <input
+                  id="caretaker"
+                  type="checkbox"
+                  {...register("caretaker")}
+                  checked={property.caretaker}
+                />
+              </div>
+              <div>
+                <label htmlFor="lift">Lift</label>
+                <input
+                  id="lift"
+                  type="checkbox"
+                  {...register("lift")}
+                  checked={property.lift}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="editPropertyForm__selectFiles">
+            <p>Drop your property photos bellow or</p>
             <input
-              id="furnished"
-              type="checkbox"
-              {...register("furnished")}
-              checked={property.furnished}
+              type="file"
+              name="image"
+              multiple
+              accept="image/*"
+              {...register("image")}
+              onChange={handleFileChange}
             />
           </div>
-          <div>
-            <label htmlFor="terrace">Terrace</label>
-            <input
-              id="terrace"
-              type="checkbox"
-              {...register("terrace")}
-              checked={property.terrace}
-            />
-          </div>
-          <div>
-            <label htmlFor="garden">Garden</label>
-            <input
-              id="garden"
-              type="checkbox"
-              {...register("garden")}
-              checked={property.garden}
-            />
-          </div>
-          <div>
-            <label htmlFor="caretaker">Caretaker</label>
-            <input
-              id="caretaker"
-              type="checkbox"
-              {...register("caretaker")}
-              checked={property.caretaker}
-            />
-          </div>
-          <div>
-            <label htmlFor="lift">Lift</label>
-            <input
-              id="lift"
-              type="checkbox"
-              {...register("lift")}
-              checked={property.lift}
-            />
-          </div>
-
-          <input
-            type="file"
-            name="image"
-            multiple
-            accept="image/*"
-            {...register("image")}
-            onChange={handleFileChange}
-          />
 
           <div
-            className="images"
+            className="imagesDrop"
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
-            style={{
-              minHeight: images.length === 0 ? "200px" : "auto", // Taille pour être visible quand vide
-              border: dragging ? "2px solid green" : "2px dashed #ccc", // Changement de cadre au survol
-            }}
           >
             {images.map((image, index) => (
               <div
@@ -304,14 +337,8 @@ const EditPropertyForm = () => {
                   }}
                 />
                 <button
-                  style={{
-                    position: "absolute",
-                    top: "5px",
-                    right: "5px",
-                    backgroundColor: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
+                  className="editPropertyForm__removeImage"
+                  type="button"
                   onClick={(e) => {
                     e.preventDefault(); // Empêche la soumission du formulaire
                     handleRemoveImage(index, image.id); // Supprime l'image
@@ -322,8 +349,6 @@ const EditPropertyForm = () => {
               </div>
             ))}
           </div>
-
-          <input type="submit" />
         </form>
       </div>
     )
