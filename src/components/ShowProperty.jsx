@@ -53,8 +53,6 @@ const ShowProperty = () => {
           ...prevCity,
           city: fetchedProperty.location,
         }));
-
-
       } catch (error) {
         setError("Error during get property:", error.message);
         console.error("Error during get property:", error.message);
@@ -86,7 +84,7 @@ const ShowProperty = () => {
       newIndex = 0;
     }
     fullScreen.setAttribute("data-index", newIndex);
-    fullScreen.src = property.images[newIndex];
+    fullScreen.src = property.images[newIndex].url;
   };
 
   return (
@@ -101,7 +99,7 @@ const ShowProperty = () => {
               <img
                 src={
                   property.images?.length
-                    ? property.images[0]
+                    ? property.images[0].url
                     : "https://via.placeholder.com/600x400"
                 }
                 alt={property.title}
@@ -117,7 +115,7 @@ const ShowProperty = () => {
                   .map((image, index) => (
                     <img
                       key={index}
-                      src={image}
+                      src={image.url}
                       alt={property.title}
                       onClick={displayFullScreenThumbnail}
                       data-index={index + 1}
