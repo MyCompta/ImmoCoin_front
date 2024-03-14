@@ -93,9 +93,9 @@
     background-color: #222;
     border: 1px solid white;
     cursor: pointer;
-    position: absolute;
-    top: -78px;
-    right: 10px;
+    // position: absolute;
+    // top: -78px;
+    // right: 10px;
 
     @include mobile-screen {
       position: initial;
