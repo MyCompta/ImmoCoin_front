@@ -65,10 +65,21 @@ export default function DisplayMap () {
     });
   };
 
+  const handlePopupOpen = () => {
+    setShowPopup(true);
+    return false;
+  }
+
+  const handlePopupClose = () => {
+    setShowPopup(false);
+  }
+
+
+
   // console.log('le city Atom dans map', city)
 
   return (
-    <div style={{ width: "100%", height: "40vh" }} onWheel={handleScroll}>
+    <div style={{ width: "40vw", height: "40vh" }} onWheel={handleScroll}>
       <Map
         mapboxAccessToken={TOKEN}
         {...viewport}
@@ -76,14 +87,16 @@ export default function DisplayMap () {
         onViewportChange={viewport => { setViewport(viewport); }}
       >
 
-      <Marker longitude={viewport.longitude} latitude={viewport.latitude} anchor="center" >
+      <Marker longitude={viewport.longitude} latitude={viewport.latitude} anchor="center" onClick={handlePopupOpen}>
         <img src={mapMarkerImage} alt="Map Marker" />
       </Marker>
 
       {showPopup && (
       <Popup longitude={viewport.longitude} latitude={viewport.latitude}
         anchor="bottom-left"
-        onClose={() => setShowPopup(false)}>
+        onClose={handlePopupClose}
+        closeOnClick={false}
+        >
         You are here
       </Popup>)}
 

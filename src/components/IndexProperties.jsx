@@ -7,6 +7,7 @@ import { errorAtom } from "../atom/errorAtom";
 import PropTypes from "prop-types";
 import "./IndexProperties.css";
 import PropertyCard from "./PropertyCard";
+import DisplayMap from "./map.jsx"
 
 const IndexProperties = ({ filter }) => {
   const [properties, setProperties] = useState("");
@@ -35,11 +36,16 @@ const IndexProperties = ({ filter }) => {
 
   return (
     <div className="indexPropertyContainer">
-      {authToken !== undefined && (
-        <Link to="/properties/new" className="btn">
-          Add a new property
-        </Link>
-      )}
+      <div className="indexheader">
+        {authToken !== undefined && (
+          <Link to="/properties/new" className="btn">
+            Add a new property
+          </Link>
+        )}
+        <div className="mapindexproperty">
+          <DisplayMap />
+        </div>
+      </div>
       <h1>Properties on the market</h1>
       <div className="properties-grid">
         {properties.length ? (
