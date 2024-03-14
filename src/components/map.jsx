@@ -47,6 +47,8 @@ export default function DisplayMap() {
     cityArray.forEach(geocodeCity);
   }, [cityArray]);
 
+  //console.log(cityArray)
+
   
 
   const [showPopup, setShowPopup] = useState('');

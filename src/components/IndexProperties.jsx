@@ -15,6 +15,7 @@ const IndexProperties = ({ filter }) => {
   const setCity = useSetAtom(cityAtom);
   const setError = useSetAtom(errorAtom);
 
+
   useEffect(() => {
     // console.log("Effect is running");
     const fetchProperties = async () => {
@@ -48,7 +49,7 @@ const IndexProperties = ({ filter }) => {
   // console.log("la ville de la property en index 0", properties[0].location)
 
   // const cityLocations = useAtomValue(cityAtom);
-  // console.log("Locations from cityAtom:", cityLocations);
+
 
 
 

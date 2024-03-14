@@ -52,6 +52,7 @@ const ShowProperty = () => {
 
         const city = fetchedProperty.location;
         setCity(city.split());
+        //console.log(city)
 
 
       } catch (error) {
