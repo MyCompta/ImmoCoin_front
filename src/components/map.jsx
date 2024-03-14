@@ -6,7 +6,7 @@ import mapboxSdk from '@mapbox/mapbox-sdk/services/geocoding';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const TOKEN = 'pk.eyJ1IjoibWF0aGlldWFtYWNoZXIiLCJhIjoiY2x0cG44eW5tMHMwaTJqbXA0aXczYXBsYiJ9.QgMMcu07S_F3aLEmwSC6WQ';
+const TOKEN = import.meta.env.VITE_MAP_API_TOKEN;
 const geocodingClient = mapboxSdk({ accessToken: TOKEN });
 
 export default function DisplayMap () {
@@ -36,7 +36,7 @@ export default function DisplayMap () {
           setViewport({
             longitude: feature.center[0],
             latitude: feature.center[1],
-            zoom: 10,
+            zoom: 4,
           });
         }
       })
