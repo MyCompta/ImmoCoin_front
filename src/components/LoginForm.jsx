@@ -29,7 +29,10 @@ const LoginForm = () => {
             token: response.headers.get("Authorization"),
             user_id: responseBody.user.id,
             email: responseBody.user.email,
-          })
+          }),
+          {
+            expires: 1,
+          }
         );
         dispatch(login());
         navigate(`/`);

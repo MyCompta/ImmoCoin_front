@@ -7,7 +7,7 @@ import { errorAtom } from "../atom/errorAtom";
 import PropTypes from "prop-types";
 import "./IndexProperties.css";
 import PropertyCard from "./PropertyCard";
-import DisplayMap from "./map.jsx"
+import DisplayMap from "./map.jsx";
 
 const IndexProperties = ({ filter }) => {
   const [properties, setProperties] = useState("");
@@ -32,7 +32,10 @@ const IndexProperties = ({ filter }) => {
     fetchProperties();
   }, [setError, filter]);
 
-  const authToken = JSON.parse(Cookies.get("auth_token"));
+  let authToken;
+  if (Cookies.get("auth_token")) {
+    authToken = JSON.parse(Cookies.get("auth_token"));
+  }
 
   return (
     <div className="indexPropertyContainer">
@@ -53,7 +56,7 @@ const IndexProperties = ({ filter }) => {
             <PropertyCard
               key={property.id}
               property={property}
-              owned={authToken.user_id === property.user_id}
+              owned={authToken?.user_id === property.user_id}
             />
           ))
         ) : (
